@@ -9,14 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Homepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity2"></activity>
+        <activity android:name=".GroupSearch" />
+        <activity android:name=".GroupProfile" />
+        <activity android:name=".CreateGroup" />
+        <activity android:name=".InterviewPage" />
+        <activity android:name=".GroupCommunicationPage" />
+        <activity android:name=".OutsiderGroupPage" />
+        <activity android:name=".PotentialGroupPage"></activity>
     </application>
 
 </manifest>
