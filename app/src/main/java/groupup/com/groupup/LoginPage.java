@@ -24,10 +24,10 @@ public class LoginPage extends AppCompatActivity {
         Button button = findViewById(R.id.loginButton);
         button.setOnClickListener(new PageTransitionListener(this, Homepage.class));
 
-        this.testUserClass();
+        this.testUserSave();
     }
 
-    private void testUserClass() {
+    private void testUserSave() {
         User joe = new User("Joe");
         joe.addGroup("soccer", "lacrosse");
         joe.setBio("Hi, I'm Joe");
@@ -38,24 +38,9 @@ public class LoginPage extends AppCompatActivity {
         jane.setBio("Hi, I'm Jane");
         jane.setProfileImage("Base64EncodedImage_Jane");
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("server/saving-data/user_test");
+        UserStorage userDatabase = UserStorage.getInstance();
 
-        DatabaseReference usersRef = ref.child("users");
-
-        List<User> users = new ArrayList<>();
-        users.add(joe);
-        users.add(jane);
-
-        usersRef.setValue(users, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    System.out.println("Data could not be saved " + databaseError.getMessage());
-                } else {
-                    System.out.println("Data saved successfully.");
-                }
-            }
-        });
+        userDatabase.addUser(joe);
+        userDatabase.addUser(jane);
     }
 }
