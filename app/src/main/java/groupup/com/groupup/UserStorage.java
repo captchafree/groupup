@@ -34,14 +34,18 @@ public class UserStorage extends Storage {
      * Adds a user to the database.
      * @param user the user to be added to the database.
      */
-    public void addUser(User user) {
-        ref.push().setValue(user, new DatabaseReference.CompletionListener() {
+    public void addUser(final User user) {
+        DatabaseReference updatedReference = ref.push();
+        final String userID = updatedReference.getKey();
+        user.setID(userID);
+
+        updatedReference.setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
-                    System.out.println("Data could not be saved " + databaseError.getMessage());
+                    System.out.println("Data could not be saved: " + databaseError.getMessage());
                 } else {
-                    System.out.println("Data saved successfully.");
+                    System.out.println("Data saved successfully: " + user.getName());
                 }
             }
         });

@@ -6,6 +6,9 @@ import java.util.List;
 
 public class User {
 
+    //TODO: Save ID to shared preferences.
+    private String ID = null;
+
     /**
      * The user's name.
      */
@@ -47,11 +50,11 @@ public class User {
     }
 
     public void addGroup(String... groupID) {
-        Collections.addAll(this.groups, groupID);
+        Collections.addAll(groups, groupID);
     }
 
     public void removeGroup(String groupID) {
-        this.groups.remove(groupID);
+        groups.remove(groupID);
     }
 
     public String getBio() {
@@ -68,5 +71,13 @@ public class User {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public String getID() {
+        return ID;
     }
 }

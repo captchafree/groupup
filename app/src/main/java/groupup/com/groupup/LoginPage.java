@@ -42,5 +42,8 @@ public class LoginPage extends AppCompatActivity {
 
         userDatabase.addUser(joe);
         userDatabase.addUser(jane);
+
+        System.out.println("Joe's UID: " + joe.getID());
+        System.out.println("Jane's UID: " + jane.getID());
     }
 }
