@@ -1,5 +1,7 @@
 package groupup.com.groupup;
 
+import android.app.Activity;
+
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,6 +33,15 @@ public class UserStorage extends Storage {
     }
 
     /**
+     * Initializes the UserStorage class with the current activity.
+     * @param activity The activity to reference.
+     */
+    public UserStorage init(Activity activity) {
+        this.activity = activity;
+        return this;
+    }
+
+    /**
      * Adds a user to the database.
      * @param user the user to be added to the database.
      */
@@ -49,5 +60,15 @@ public class UserStorage extends Storage {
                 }
             }
         });
+    }
+
+    public void setCurrentUser(User user) {
+        (new LocalStorage(activity)).putString(LocalDataKeys.USERID.toString(), user.getID());
+    }
+
+    public User getCurrentUser() {
+        String UID = (new LocalStorage(activity)).getString(LocalDataKeys.USERID.toString());
+
+        return null;
     }
 }
