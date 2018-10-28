@@ -16,5 +16,4 @@ public class Homepage extends AppCompatActivity {
 
         button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
     }
-
 }
