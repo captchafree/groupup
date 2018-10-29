@@ -1,15 +1,22 @@
 package groupup.com.groupup;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.SyncFailedException;
 import java.util.ArrayList;
@@ -18,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginPage extends AppCompatActivity {
+    private FirebaseAuth mauth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +34,69 @@ public class LoginPage extends AppCompatActivity {
 
         Button button = findViewById(R.id.loginButton);
         button.setOnClickListener(new PageTransitionListener(this, Homepage.class));
+        //TODO: add button for create account
 
-        this.testUserSave();
+        //TODO: insert view for text fields
+
+        /*this.testUserSave();*/
+
+        mauth = FirebaseAuth.getInstance();
+    }
+
+    public void onStart(){
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mauth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void createAccount(String email, String password){
+        mauth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mauth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginPage.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    public void signIn(String email, String password){
+        mauth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mauth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginPage.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user) {
     }
 
     private void testUserSave() {
