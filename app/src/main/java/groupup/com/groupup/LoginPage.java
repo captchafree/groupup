@@ -24,19 +24,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mauth;
+    private EditText em;
+    private EditText pass;
+    private TextView mess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
-        Button button = findViewById(R.id.loginButton);
-        button.setOnClickListener(new PageTransitionListener(this, Homepage.class));
-        //TODO: add button for create account
+        /*Button button = findViewById(R.id.loginButton);
+        button.setOnClickListener(new PageTransitionListener(this, Homepage.class));*/
+        findViewById(R.id.loginButton).setOnClickListener(this);
+        findViewById((R.id.createAccountButton)).setOnClickListener(this);
+        findViewById(R.id.contButton).setOnClickListener(new PageTransitionListener(this, Homepage.class));
+        findViewById(R.id.signOutButton).setOnClickListener(this);
 
-        //TODO: insert view for text fields
+        em = findViewById(R.id.login_name);
+        pass = findViewById(R.id.login_2);
+        mess = findViewById((R.id.signedInMess));
 
         /*this.testUserSave();*/
 
@@ -97,6 +105,46 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+        if(user!= null){
+            findViewById(R.id.loginButton).setVisibility(View.GONE);
+            findViewById((R.id.createAccountButton)).setVisibility(View.GONE);
+            findViewById(R.id.login_name).setVisibility(View.GONE);
+            findViewById(R.id.login_2).setVisibility(View.GONE);
+            findViewById(R.id.signOutButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.contButton).setVisibility(View.VISIBLE);
+            findViewById((R.id.signedInMess)).setVisibility(View.VISIBLE);
+            String messout = "You are signed in as ";
+            messout = messout + user.getEmail();
+            mess.setText(messout);
+        }
+        else{
+            findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+            findViewById((R.id.createAccountButton)).setVisibility(View.VISIBLE);
+            findViewById(R.id.login_name).setVisibility(View.VISIBLE);
+            findViewById(R.id.login_2).setVisibility(View.VISIBLE);
+            findViewById(R.id.signOutButton).setVisibility(View.GONE);
+            findViewById(R.id.contButton).setVisibility(View.GONE);
+            findViewById((R.id.signedInMess)).setVisibility(View.GONE);
+        }
+    }
+
+    private void signOut() {
+        mauth.signOut();
+        updateUI(null);
+    }
+
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.createAccountButton) {
+            createAccount(em.getText().toString(), pass.getText().toString());
+        } else if (i == R.id.loginButton) {
+            signIn(em.getText().toString(), pass.getText().toString());
+        } else if (i == R.id.signOutButton) {
+            signOut();
+        }
+        /*} else if (i == R.id.verifyEmailButton) {
+            sendEmailVerification();
+        }*/
     }
 
     private void testUserSave() {
