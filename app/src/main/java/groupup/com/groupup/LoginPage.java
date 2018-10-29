@@ -1,15 +1,22 @@
 package groupup.com.groupup;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.SyncFailedException;
 import java.util.ArrayList;
@@ -17,17 +24,127 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity implements View.OnClickListener {
+    private FirebaseAuth mauth;
+    private EditText em;
+    private EditText pass;
+    private TextView mess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
-        Button button = findViewById(R.id.loginButton);
-        button.setOnClickListener(new PageTransitionListener(this, Homepage.class));
+        /*Button button = findViewById(R.id.loginButton);
+        button.setOnClickListener(new PageTransitionListener(this, Homepage.class));*/
+        findViewById(R.id.loginButton).setOnClickListener(this);
+        findViewById((R.id.createAccountButton)).setOnClickListener(this);
+        findViewById(R.id.contButton).setOnClickListener(new PageTransitionListener(this, Homepage.class));
+        findViewById(R.id.signOutButton).setOnClickListener(this);
 
-        this.testUserSave();
+        em = findViewById(R.id.login_name);
+        pass = findViewById(R.id.login_2);
+        mess = findViewById((R.id.signedInMess));
+
+        /*this.testUserSave();*/
+
+        mauth = FirebaseAuth.getInstance();
+    }
+
+    public void onStart(){
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mauth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void createAccount(String email, String password){
+        mauth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mauth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginPage.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    public void signIn(String email, String password){
+        mauth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mauth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginPage.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if(user!= null){
+            findViewById(R.id.loginButton).setVisibility(View.GONE);
+            findViewById((R.id.createAccountButton)).setVisibility(View.GONE);
+            findViewById(R.id.login_name).setVisibility(View.GONE);
+            findViewById(R.id.login_2).setVisibility(View.GONE);
+            findViewById(R.id.signOutButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.contButton).setVisibility(View.VISIBLE);
+            findViewById((R.id.signedInMess)).setVisibility(View.VISIBLE);
+            String messout = "You are signed in as ";
+            messout = messout + user.getEmail();
+            mess.setText(messout);
+        }
+        else{
+            findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+            findViewById((R.id.createAccountButton)).setVisibility(View.VISIBLE);
+            findViewById(R.id.login_name).setVisibility(View.VISIBLE);
+            findViewById(R.id.login_2).setVisibility(View.VISIBLE);
+            findViewById(R.id.signOutButton).setVisibility(View.GONE);
+            findViewById(R.id.contButton).setVisibility(View.GONE);
+            findViewById((R.id.signedInMess)).setVisibility(View.GONE);
+        }
+    }
+
+    private void signOut() {
+        mauth.signOut();
+        updateUI(null);
+    }
+
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.createAccountButton) {
+            createAccount(em.getText().toString(), pass.getText().toString());
+        } else if (i == R.id.loginButton) {
+            signIn(em.getText().toString(), pass.getText().toString());
+        } else if (i == R.id.signOutButton) {
+            signOut();
+        }
+        /*} else if (i == R.id.verifyEmailButton) {
+            sendEmailVerification();
+        }*/
     }
 
     private void testUserSave() {

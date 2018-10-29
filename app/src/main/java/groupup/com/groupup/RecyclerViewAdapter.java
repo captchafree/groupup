@@ -1,6 +1,7 @@
 package groupup.com.groupup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,16 +23,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static final String TAG = "RecyclerViewAdapter";
 
     private ArrayList<String> mGroupNames = new ArrayList<>();
+    private ArrayList<String> mGroupIDs = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> groupNames, ArrayList<String> images){
+    public RecyclerViewAdapter(Context context, ArrayList<String> groupNames, ArrayList<String> groupIDs, ArrayList<String> images){
         mContext = context;
         mGroupNames = groupNames;
+        mGroupIDs = new ArrayList<>();
         mImages = images;
     }
 
-    //Responsible for inflating the view, recycles the viewholders and putting them into poitions
+    //Responsible for inflating the view, recycles the viewholders and putting them into po itions
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
@@ -58,7 +61,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "OnClick: clicked on " + mGroupNames.get(position));
-                Toast.makeText(mContext, mGroupNames.get(position), Toast.LENGTH_SHORT).show();
+
+                //Print the group's name on the user's screen
+                //Toast.makeText(mContext, mGroupNames.get(position), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(mContext, OutsiderGroupPage.class);
+                intent.putExtra("image_url", mImages.get(position));
+                intent.putExtra("group_name", mGroupNames.get(position));
+                mContext.startActivity(intent);
             }
         });
     }
