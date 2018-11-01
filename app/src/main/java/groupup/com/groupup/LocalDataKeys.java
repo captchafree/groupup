@@ -3,7 +3,8 @@ package groupup.com.groupup;
 public enum LocalDataKeys {
 
     PREFERENCES("Preferences"),
-    USERID("UID");
+    USERID("UID"),
+    GROUPID("GID");
 
     private final String key;
 
