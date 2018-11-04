@@ -39,8 +39,6 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         /*this.testUserSave();*/
 
         mauth = FirebaseAuth.getInstance();
-
-
     }
 
     public void onStart(){

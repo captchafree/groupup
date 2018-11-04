@@ -51,18 +51,18 @@ public class GroupQuery {
         });
     }
 
-    public static void getCurrentUser() {
-        //String UID = "-LQUxfvD_f0oiI5nC-T7";//(new LocalStorage(activity)).getString(LocalDataKeys.USERID.toString());
-
+    public static void getUserWithID(String id, final Callback callback) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
 
-        Query query = db.orderByChild("bio");//.equalTo(UID);
+        Query query = db.orderByChild("id").equalTo(id);
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                System.out.println("HIT!");
-                //User user = dataSnapshot.getValue(User.class);
+                User user = dataSnapshot.getValue(User.class);
+                System.out.println(user.getName());
+
+                callback.onCallback(user);
             }
 
             @Override
@@ -77,9 +77,5 @@ public class GroupQuery {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-
-        System.out.println("getting user");
-
-        //return null;
     }
 }

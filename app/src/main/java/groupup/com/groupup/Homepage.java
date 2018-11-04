@@ -19,6 +19,5 @@ public class Homepage extends AppCompatActivity {
         GroupSearch_Button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
         CreateGroup_Button.setOnClickListener(new PageTransitionListener(this, CreateGroup.class));
         GroupProfile_Button.setOnClickListener(new PageTransitionListener(this, GroupProfile.class));
-
     }
 }
