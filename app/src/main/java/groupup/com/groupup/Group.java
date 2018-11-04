@@ -1,11 +1,12 @@
 package groupup.com.groupup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
-public class Group {
+public class Group implements Serializable {
 
     /**
      *  Group ID to be retrieved from Firebase
@@ -33,6 +34,11 @@ public class Group {
     private String location;
 
     /**
+     *  Group's picture (taken in as URL link)
+     */
+    private String picture;
+
+    /**
      *  Group's owner name
      */
     private String owner;
@@ -47,6 +53,7 @@ public class Group {
      */
     private List<String> leaders;
 
+
     public Group() {
         this.ID = "";
         this.name = "";
@@ -54,12 +61,13 @@ public class Group {
         this.location = "";
     }
 
-    public Group(String id, String name, String activity, String location){
+    public Group(String id, String name, String activity, String location, String picture){
         this.ID = id;
         this.name = name;
         this.bio = null;
         this.activity = activity;
         this.location = location;
+        this.picture = picture;
         this.owner = null;
         this.members = new ArrayList<>();
         this.leaders = new ArrayList<>();
@@ -97,6 +105,10 @@ public class Group {
 
     public void setLocation(String location) { this.location = location; }
 
+    public String getPicture() { return picture; }
+
+    public void setPicture(String picture) { this.picture = picture; }
+
     public String getOwner() { return owner; }
 
     public void setOwner(String owner) { this.owner = owner; }
@@ -115,6 +127,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group info - {id: " + this.ID + "}, {name: " + this.name + "}, {location: " + this.location + "}, {activity: " + this.activity + "}";
+        return "Group info - {id: " + this.ID + "}, {name: " + this.name + "}, {location: " + this.location + "}, {activity: " + this.activity + "} {picture: " + this.picture + "}";
     }
 }

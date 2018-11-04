@@ -16,6 +16,7 @@ public class CreateGroup extends AppCompatActivity {
     private EditText editTextName;
     private EditText editTextActivity;
     private EditText editTextLocation;
+    private EditText editTextPicture;
     private Button buttonAdd;
 
     DatabaseReference databaseGroups;
@@ -33,6 +34,7 @@ public class CreateGroup extends AppCompatActivity {
         editTextName = (EditText) findViewById(R.id.editTextName);
         editTextActivity = (EditText) findViewById(R.id.editTextActivity);
         editTextLocation = (EditText) findViewById(R.id.editTextLocation);
+        editTextPicture = (EditText) findViewById(R.id.editTextPicture);
         buttonAdd = findViewById(R.id.buttonAdd);
 
         /*
@@ -55,10 +57,11 @@ public class CreateGroup extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String activity = editTextActivity.getText().toString().trim();
         String location = editTextLocation.getText().toString().trim();
+        String picture = editTextPicture.getText().toString().trim();
 
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
             String id = databaseGroups.push().getKey();
-            Group group = new Group(id, name, activity.toUpperCase(), location);
+            Group group = new Group(id, name, activity.toUpperCase(), location, picture);
             databaseGroups.child(id).setValue(group);
             Toast.makeText(this, "Group successfully added", Toast.LENGTH_LONG).show();
         }
