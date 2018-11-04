@@ -55,7 +55,6 @@ public class UserStorage extends Storage {
     public void addUser(final User user) {
         DatabaseReference updatedReference = ref.push();
         final String userID = updatedReference.getKey();
-        user.setID(userID);
 
         updatedReference.setValue(user, new DatabaseReference.CompletionListener() {
             @Override

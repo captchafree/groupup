@@ -48,7 +48,9 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         updateUI(currentUser);
     }
 
-    private void createAccount(String email, String password){
+    private void createAccount(final String email, String password){
+        final UserStorage userDatabase = UserStorage.getInstance().init(this);
+
         mauth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -57,6 +59,12 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mauth.getCurrentUser();
+
+                            User u = new User("");
+                            u.setID(user.getUid());
+                            u.setName(email);
+
+                            userDatabase.addUser(u);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
