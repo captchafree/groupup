@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -24,12 +23,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private ArrayList<String> mGroupNames;
     private ArrayList<String> mImages;
+    private ArrayList<Group> mGroups;
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> groupNames, ArrayList<String> groupIDs, ArrayList<String> images){
+    public RecyclerViewAdapter(Context context, ArrayList<Group> groups){
+
+        mGroupNames = new ArrayList<String>();
+        mImages = new ArrayList<String>();
+        for(Group g : groups) {
+            mGroupNames.add(g.getName());
+            mImages.add(g.getPicture());
+        }
+
+        mGroups = groups;
         mContext = context;
-        mGroupNames = groupNames;
-        mImages = images;
     }
 
     //Responsible for inflating the view, recycles the viewholders and putting them into positions
@@ -64,8 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 //Toast.makeText(mContext, mGroupNames.get(position), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(mContext, OutsiderGroupPage.class);
-                intent.putExtra("image_url", mImages.get(position));
-                intent.putExtra("group_name", mGroupNames.get(position));
+                intent.putExtra("group", mGroups.get(position));
                 mContext.startActivity(intent);
             }
         });
