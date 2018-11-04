@@ -8,7 +8,7 @@ public class Homepage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //comment my own change asdfgd
+        //comment my own change asdfgdp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
