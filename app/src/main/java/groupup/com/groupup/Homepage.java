@@ -12,9 +12,13 @@ public class Homepage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        Button button = findViewById(R.id.button);
+        Button GroupSearch_Button = findViewById(R.id.GroupSearch_Button);
+        Button CreateGroup_Button = findViewById(R.id.CreateGroup_Button);
+        Button GroupProfile_Button = findViewById(R.id.GroupProfile_Button);
 
-        button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
+        GroupSearch_Button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
+        CreateGroup_Button.setOnClickListener(new PageTransitionListener(this, CreateGroup.class));
+        GroupProfile_Button.setOnClickListener(new PageTransitionListener(this, GroupProfile.class));
+
     }
-
 }
