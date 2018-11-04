@@ -57,7 +57,8 @@ public class CreateGroup extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String activity = editTextActivity.getText().toString().trim();
         String location = editTextLocation.getText().toString().trim();
-        String picture = editTextPicture.getText().toString().trim();
+        String imageURL = editTextPicture.getText().toString().trim();
+        String picture = (imageURL.length() == 0) ? "https://goo.gl/JTSgZX" : imageURL;
 
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
             String id = databaseGroups.push().getKey();

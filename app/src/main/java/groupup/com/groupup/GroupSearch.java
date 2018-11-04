@@ -54,7 +54,6 @@ public class GroupSearch extends AppCompatActivity {
 
     private void initImageBitmaps() {
         Log.d(TAG, "initBitmaps: preparing bitmaps");
-
         initRecyclerView();
     }
 
@@ -72,7 +71,7 @@ public class GroupSearch extends AppCompatActivity {
 
         for(Group g : results) {
             mNames.add(g.getName());
-            mImageUrls.add("https://goo.gl/JTSgZX");
+            mImageUrls.add(g.getPicture());
         }
 
         this.initRecyclerView();

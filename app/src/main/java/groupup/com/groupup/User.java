@@ -15,6 +15,11 @@ public class User {
     private String name;
 
     /**
+     * The user's email.
+     */
+    private String email;
+
+    /**
      * The user's bio.
      */
     private String bio;
@@ -35,6 +40,10 @@ public class User {
         this.bio = null;
         this.groups = new ArrayList<>();
         this.profileImage = null;
+    }
+
+    public User() {
+        this("");
     }
 
     public String getName() {
@@ -79,5 +88,13 @@ public class User {
 
     public String getID() {
         return ID;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
