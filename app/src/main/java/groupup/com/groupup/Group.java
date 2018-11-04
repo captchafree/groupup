@@ -47,8 +47,11 @@ public class Group {
      */
     private List<String> leaders;
 
-    public Group(){
-
+    public Group() {
+        this.ID = "";
+        this.name = "";
+        this.activity = "";
+        this.location = "";
     }
 
     public Group(String id, String name, String activity, String location){
@@ -110,5 +113,8 @@ public class Group {
 
     public void removeLeader(String userID) { leaders.remove(userID); }
 
-
+    @Override
+    public String toString() {
+        return "Group info - {id: " + this.ID + "}, {name: " + this.name + "}, {location: " + this.location + "}, {activity: " + this.activity + "}";
+    }
 }

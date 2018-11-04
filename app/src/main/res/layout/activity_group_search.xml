@@ -8,10 +8,25 @@
     tools:context=".GroupSearch">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerv_view">
+        android:layout_below="@+id/groupSearchBar"
+        android:layout_marginTop="-46dp">
 
     </android.support.v7.widget.RecyclerView>
+
+    <EditText
+        android:id="@+id/groupSearchBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
