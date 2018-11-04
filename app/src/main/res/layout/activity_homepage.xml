@@ -35,4 +35,12 @@
         android:layout_marginTop="185dp"
         android:text="To Group Profile" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerv_view_homepage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/GroupProfile_Button"
+        android:layout_marginTop="-46dp">
+    </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>

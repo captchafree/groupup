@@ -47,11 +47,6 @@ public class GroupSearch extends AppCompatActivity {
         GroupQuery.getCurrentUser();
     }
 
-    private void initImageBitmaps() {
-        Log.d(TAG, "initBitmaps: preparing bitmaps");
-        initRecyclerView();
-    }
-
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
@@ -61,14 +56,6 @@ public class GroupSearch extends AppCompatActivity {
     }
 
     public void refreshView() {
-        mNames.clear();
-        mImageUrls.clear();
-
-        for(Group g : results) {
-            mNames.add(g.getName());
-            mImageUrls.add(g.getPicture());
-        }
-
         this.initRecyclerView();
     }
 

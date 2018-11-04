@@ -51,6 +51,46 @@ public class GroupQuery {
         });
     }
 
+    /**
+     * Populates the results list with the groups that match the searchText
+     * @param homepage The page the search is occurring on
+     * @param userID The userID to search for in the database
+     * @param results A list of the groups that match the
+     */
+    public static void getGroupwithUserID(final Homepage homepage, final String userID, final ArrayList<Group> results) {
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("groups/");
+
+        Query query = database.orderByChild("name");//.equalTo(searchText.toUpperCase());
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+
+                //Change to .getActivity .getGroupMembers once implemented into Group class
+                if(group.getActivity().toUpperCase().contains(userID.toUpperCase())) {
+                    results.add(group);
+                    homepage.refreshView();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
+
+
     public static void getCurrentUser() {
         //String UID = "-LQUxfvD_f0oiI5nC-T7";//(new LocalStorage(activity)).getString(LocalDataKeys.USERID.toString());
 
