@@ -23,25 +23,35 @@ public class OutsiderGroupPage extends AppCompatActivity {
 
     private void getIncomingIntent(){
         Log.d(TAG, "getIncomingIntent: checking for incoming intents");
-        if(getIntent().hasExtra("image_url") && getIntent().hasExtra("group_name"))
+        if(getIntent().hasExtra("group"))
         {
             Log.d(TAG, "getIncomingIntent: found intent extras.");
 
-            String imageUrl = getIntent().getStringExtra("image_url");
-            String groupName = getIntent().getStringExtra("group_name");
+            Group currentGroup = (Group) getIntent().getSerializableExtra("group");
+            String imageUrl = currentGroup.getPicture();
+            String groupName = currentGroup.getName();
+            String groupLocation = currentGroup.getLocation();
+            String groupActivity = currentGroup.getActivity();
+            /* TO DO: using ArrayList<String> groupMemberIDs = currentGroup.getMembers();
+             *      1. Query firebase using each user's ID to get their name
+             *      2. Add names to the member string
+             *      3. Send member string to setImage
+             *
+             *      Or create an adapter to query and add the names to an arraylist & display
+             */
 
-            setImage(imageUrl, groupName);
+            setImage(imageUrl, groupName, groupLocation, groupActivity);
         }
     }
 
-    private void setImage(String imageUrl, String groupName){
+    private void setImage(String imageUrl, String groupName, String groupLocation, String groupActivity){
         Log.d(TAG, "setImage: setting the image and name to widgets");
 
         TextView name = findViewById(R.id.group_description);
-        name.setText(groupName);
+        name.setText(groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers:");
 
         ImageView image = findViewById(R.id.image);
-        
+
         Glide.with(this)
                 .asBitmap()
                 .load(imageUrl)

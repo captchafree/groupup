@@ -15,10 +15,6 @@ public class GroupSearch extends AppCompatActivity {
 
     private static final String TAG = "GroupSearch";
 
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mIDs = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
-
     private ArrayList<Group> results = new ArrayList<>();
 
     @Override
@@ -27,7 +23,6 @@ public class GroupSearch extends AppCompatActivity {
         setContentView(R.layout.activity_group_search);
 
         Log.d(TAG, "onCreate: started.");
-        initImageBitmaps();
 
         final EditText searchField = (EditText) findViewById(R.id.groupSearchBar);
 
@@ -60,7 +55,7 @@ public class GroupSearch extends AppCompatActivity {
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mIDs, mImageUrls);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

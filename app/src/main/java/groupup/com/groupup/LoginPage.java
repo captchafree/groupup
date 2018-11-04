@@ -82,7 +82,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
     }
 
     public void signIn(String email, String password){
-        mauth.signInWithEmailAndPassword(email, password)
+        mauth.  signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
