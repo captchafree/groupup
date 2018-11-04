@@ -58,7 +58,7 @@ public class CreateGroup extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
             String id = databaseGroups.push().getKey();
-            Group group = new Group(id, name, activity, location);
+            Group group = new Group(id, name, activity.toUpperCase(), location);
             databaseGroups.child(id).setValue(group);
             Toast.makeText(this, "Group successfully added", Toast.LENGTH_LONG).show();
         }

@@ -18,23 +18,21 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mGroupNames = new ArrayList<>();
-    private ArrayList<String> mGroupIDs = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<String> mGroupNames;
+    private ArrayList<String> mImages;
     private Context mContext;
 
     public RecyclerViewAdapter(Context context, ArrayList<String> groupNames, ArrayList<String> groupIDs, ArrayList<String> images){
         mContext = context;
         mGroupNames = groupNames;
-        mGroupIDs = new ArrayList<>();
         mImages = images;
     }
 
-    //Responsible for inflating the view, recycles the viewholders and putting them into po itions
+    //Responsible for inflating the view, recycles the viewholders and putting them into positions
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
@@ -74,14 +72,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     //Tells the adapter how many items are in the list
-    // if 0, nothing would happen
+    //if 0, nothing would happen
     @Override
     public int getItemCount() {
         return mGroupNames.size();
     }
 
     //Holds each entry in memory and recycles, holds the view
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
         TextView groupName;

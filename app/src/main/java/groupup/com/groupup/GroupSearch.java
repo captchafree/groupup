@@ -1,10 +1,13 @@
 package groupup.com.groupup;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -16,6 +19,8 @@ public class GroupSearch extends AppCompatActivity {
     private ArrayList<String> mIDs = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
 
+    private ArrayList<Group> results = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,31 +28,32 @@ public class GroupSearch extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: started.");
         initImageBitmaps();
+
+        final EditText searchField = (EditText) findViewById(R.id.groupSearchBar);
+
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                results.clear();
+                refreshView();
+                search(searchField.getText().toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        search("");
+
+        System.out.println("Getting current user");
+        GroupQuery.getCurrentUser();
     }
 
-    private void initImageBitmaps(){
+    private void initImageBitmaps() {
         Log.d(TAG, "initBitmaps: preparing bitmaps");
-        mImageUrls.add("https://goo.gl/DMAvZ6");
-        mNames.add("Basketball");
-
-        mImageUrls.add("https://goo.gl/s4g5By");
-        mNames.add("Study Group");
-
-        mImageUrls.add("https://goo.gl/tBBuCU");
-        mNames.add("Bingo");
-
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy");
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy1");
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy2");
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy3");
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy4");
-        mImageUrls.add("https://goo.gl/JTSgZX");
-        mNames.add("Dummy5");
 
         initRecyclerView();
     }
@@ -60,4 +66,19 @@ public class GroupSearch extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    public void refreshView() {
+        mNames.clear();
+        mImageUrls.clear();
+
+        for(Group g : results) {
+            mNames.add(g.getName());
+            mImageUrls.add("https://goo.gl/JTSgZX");
+        }
+
+        this.initRecyclerView();
+    }
+
+    private void search(String activity) {
+        GroupQuery.getGroupsWithActivity(this, activity, results);
+    }
 }
