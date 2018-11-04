@@ -24,9 +24,9 @@
         android:layout_below="@+id/editTextName"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="146dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
         android:ems="10"
         android:hint="Enter Group's Location"
         android:inputType="textPersonName"
@@ -40,9 +40,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="71dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:ems="10"
         android:hint="Enter Group's Name"
         android:inputType="textPersonName"
@@ -56,7 +56,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="14dp"
         android:layout_marginRight="14dp"
         android:ems="10"
@@ -64,5 +64,17 @@
         android:inputType="textLongMessage|textPersonName"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="160dp" />
+
+    <EditText
+        android:id="@+id/editTextPicture"
+        android:layout_width="354dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editTextLocation"
+        android:layout_alignLeft="@+id/editTextLocation"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="182dp"
+        android:ems="10"
+        android:hint="Enter Group's Picture (URL)"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
