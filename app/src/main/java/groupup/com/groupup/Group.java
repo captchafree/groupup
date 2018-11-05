@@ -46,7 +46,7 @@ public class Group implements Serializable {
     /**
      *  List of members that are currently in the group, stores user's unique IDs
      */
-    private List<String> members;
+    private List<String> members = new ArrayList<>();
 
     /**
      *  List of leaders that are currently in the group, stores user's unique IDs

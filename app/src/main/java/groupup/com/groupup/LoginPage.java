@@ -62,7 +62,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
 
                             User u = new User("");
                             u.setID(user.getUid());
-                            u.setName(email);
+                            u.setEmail(email);
 
                             userDatabase.addUser(u);
                             updateUI(user);

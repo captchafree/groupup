@@ -23,15 +23,6 @@ public class GroupSearch extends AppCompatActivity {
         setContentView(R.layout.activity_group_search);
 
         Log.d(TAG, "onCreate: started.");
-        System.out.println("Get the current user!");
-        GroupQuery.getUserWithID("cmwmCMKLkwdMDfm0w6C3XmQKkhd2", new Callback() {
-            @Override
-            public void onCallback(Object value) {
-                User user = (User) value;
-                System.out.println("User name: " + user.getName());
-            }
-        });
-        
 
         final EditText searchField = findViewById(R.id.groupSearchBar);
 

@@ -60,8 +60,6 @@ public class GroupQuery {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 User user = dataSnapshot.getValue(User.class);
-                System.out.println(user.getName());
-
                 callback.onCallback(user);
             }
 
