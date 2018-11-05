@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class OutsiderGroupPage extends AppCompatActivity {
+public class OutsiderGroupPage extends AppCompatActivity  {
     private static final String TAG = "OutsiderGroupPage";
     private Group currentGroup;
 
