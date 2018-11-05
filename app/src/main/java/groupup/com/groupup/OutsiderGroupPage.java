@@ -38,13 +38,6 @@ public class OutsiderGroupPage extends AppCompatActivity {
             String groupName = currentGroup.getName();
             String groupLocation = currentGroup.getLocation();
             String groupActivity = currentGroup.getActivity();
-            /* TO DO: using ArrayList<String> groupMemberIDs = currentGroup.getMembers();
-             *      1. Query firebase using each user's ID to get their name
-             *      2. Add names to the member string
-             *      3. Send member string to setImage
-             *
-             *      Or create an adapter to query and add the names to an arraylist & display
-             */
 
             this.currentGroup = currentGroup;
             setImage(imageUrl, groupName, groupLocation, groupActivity);
