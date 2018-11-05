@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Homepage">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Activity 1" />
-
     <Button
         android:id="@+id/GroupSearch_Button"
         android:layout_width="wrap_content"
@@ -42,6 +36,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_alignParentLeft="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/homepage_recycview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/userInformation"
+        android:layout_marginTop="-46dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

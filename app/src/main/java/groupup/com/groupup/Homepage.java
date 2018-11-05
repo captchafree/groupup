@@ -2,12 +2,21 @@ package groupup.com.groupup;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class Homepage extends AppCompatActivity {
+
+    private static final String TAG = "Homepage";
+    private ArrayList<Group> results = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +33,11 @@ public class Homepage extends AppCompatActivity {
         GroupProfile_Button.setOnClickListener(new PageTransitionListener(this, GroupProfile.class));
 
         this.setupUserView((TextView) findViewById(R.id.userInformation));
+
+        //To do: add groups the user is in to results
+        if(results.size() > 0)
+            initRecyclerView();
+
     }
 
     private void setupUserView(final TextView view) {
@@ -40,4 +54,14 @@ public class Homepage extends AppCompatActivity {
             }
         });
     }
+
+    private void initRecyclerView() {
+        Log.d(TAG, "initRecyclerView: init recyclerView.");
+        RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results, GroupProfile.class);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+
 }
