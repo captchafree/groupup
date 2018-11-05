@@ -26,6 +26,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outsider_group_page);
         findViewById(R.id.joinButton).setOnClickListener(this);
+        findViewById(R.id.leaveButton).setOnClickListener(this);
         getIncomingIntent();
     }
 
@@ -50,11 +51,36 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
         int i = v.getId();
         boolean isMem = false;
         final Group curr = this.currentGroup;
-        if (i == R.id.joinButton) {
+        if (i == R.id.leaveButton) {
+            if(this.currentGroup.getMembers().size() != 0) {
+                boolean found = false;
+                for (String uid : this.currentGroup.getMembers()) {
+                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        found = true;
+                        GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
+                            @Override
+                            public void onCallback(Object value) {
+                                User user = (User) value;
+                                curr.removeMember(user.getID());
+                                user.removeGroup(curr.getID());
+                                GroupQuery.updateUserWithID(user.getID(), user);
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                                Toast.makeText(OutsiderGroupPage.this, "Left the group", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+                if(!found){
+                    Toast.makeText(OutsiderGroupPage.this, "You are not in this group", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        else if (i == R.id.joinButton) {
             if(this.currentGroup.getMembers().size() != 0) {
                 for (String uid : this.currentGroup.getMembers()) {
                     if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                         isMem = true;
+                        Toast.makeText(OutsiderGroupPage.this, "You are already a member of this group", Toast.LENGTH_LONG).show();
                     }
                 }
                 if(!isMem){
@@ -66,6 +92,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
                             user.addGroup(curr.getID());
                             GroupQuery.updateUserWithID(user.getID(), user);
                             FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                            Toast.makeText(OutsiderGroupPage.this, "Joined the group", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -79,6 +106,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
                         user.addGroup(curr.getID());
                         GroupQuery.updateUserWithID(user.getID(), user);
                         FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                        Toast.makeText(OutsiderGroupPage.this, "Joined the group", Toast.LENGTH_LONG).show();
                     }
                 });
             }

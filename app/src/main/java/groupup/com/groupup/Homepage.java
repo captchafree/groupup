@@ -52,6 +52,10 @@ public class Homepage extends AppCompatActivity {
                 text += "Name: " + user.getName() + "\n";
                 text += "Email: " + user.getEmail() + "\n";
                 text += "Profile Image: " + user.getProfileImage() + "\n";
+
+                for(String groupID : user.getGroups()) {
+                    text += groupID + "\n";
+                }
                 view.setText(text);
 
 
