@@ -25,8 +25,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> mImages;
     private ArrayList<Group> mGroups;
     private Context mContext;
+    private Class nextPage;
 
-    public RecyclerViewAdapter(Context context, ArrayList<Group> groups){
+    public RecyclerViewAdapter(Context context, ArrayList<Group> groups, Class to){
 
         mGroupNames = new ArrayList<String>();
         mImages = new ArrayList<String>();
@@ -37,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         mGroups = groups;
         mContext = context;
+        nextPage = to;
     }
 
     //Responsible for inflating the view, recycles the viewholders and putting them into positions
@@ -70,7 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 //Print the group's name on the user's screen
                 //Toast.makeText(mContext, mGroupNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(mContext, OutsiderGroupPage.class);
+                Intent intent = new Intent(mContext, nextPage);
                 intent.putExtra("group", mGroups.get(position));
                 mContext.startActivity(intent);
             }
