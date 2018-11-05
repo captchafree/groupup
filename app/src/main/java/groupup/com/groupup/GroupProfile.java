@@ -3,12 +3,15 @@ package groupup.com.groupup;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class GroupProfile extends AppCompatActivity {
+public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "OutsiderGroupPage";
     private Group currentGroup;
@@ -35,6 +38,29 @@ public class GroupProfile extends AppCompatActivity {
 
             this.currentGroup = currentGroup;
             setImage(imageUrl, groupName, groupLocation, groupActivity);
+        }
+    }
+
+    public void onClick(View v) {
+        int i = v.getId();
+        final Group curr = this.currentGroup;
+        if (i == R.id.leaveButton) {
+            if(this.currentGroup.getMembers().size() != 0) {
+                for (String uid : this.currentGroup.getMembers()) {
+                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
+                            @Override
+                            public void onCallback(Object value) {
+                                User user = (User) value;
+                                curr.removeMember(user.getID());
+                                user.removeGroup(curr.getID());
+                                GroupQuery.updateUserWithID(user.getID(), user);
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                            }
+                        });
+                    }
+                }
+            }
         }
     }
 
