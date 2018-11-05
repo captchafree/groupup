@@ -24,7 +24,7 @@ public class GroupSearch extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: started.");
 
-        final EditText searchField = (EditText) findViewById(R.id.groupSearchBar);
+        final EditText searchField = findViewById(R.id.groupSearchBar);
 
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -42,12 +42,14 @@ public class GroupSearch extends AppCompatActivity {
         });
 
         search("");
-
-        System.out.println("Getting current user");
-        GroupQuery.getCurrentUser();
     }
 
-    private void initRecyclerView(){
+    private void initImageBitmaps() {
+        Log.d(TAG, "initBitmaps: preparing bitmaps");
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results);

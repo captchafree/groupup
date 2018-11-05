@@ -9,9 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class OutsiderGroupPage extends AppCompatActivity {
     private static final String TAG = "OutsiderGroupPage";
+    private Group currentGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +46,34 @@ public class OutsiderGroupPage extends AppCompatActivity {
              *      Or create an adapter to query and add the names to an arraylist & display
              */
 
+            this.currentGroup = currentGroup;
             setImage(imageUrl, groupName, groupLocation, groupActivity);
         }
     }
 
-    private void setImage(String imageUrl, String groupName, String groupLocation, String groupActivity){
+    private synchronized void setImage(final String imageUrl, final String groupName, final String groupLocation, final String groupActivity){
         Log.d(TAG, "setImage: setting the image and name to widgets");
 
-        TextView name = findViewById(R.id.group_description);
-        name.setText(groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers:");
+        final TextView name = findViewById(R.id.group_description);
+
+        final StringBuilder membersText = new StringBuilder();
+
+        if(this.currentGroup.getMembers().size() != 0) {
+            for (String uid : this.currentGroup.getMembers()) {
+                GroupQuery.getUserWithID(uid, new Callback() {
+                    @Override
+                    public void onCallback(Object value) {
+                        User user = (User) value;
+                        System.out.println("name: " + user.getName());
+                        membersText.append("\n" + user.getName());
+
+                        setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers:" + membersText.toString());
+                    }
+                });
+            }
+        } else {
+            this.setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers: None");
+        }
 
         ImageView image = findViewById(R.id.image);
 
@@ -56,5 +81,9 @@ public class OutsiderGroupPage extends AppCompatActivity {
                 .asBitmap()
                 .load(imageUrl)
                 .into(image);
+    }
+
+    private void setDisplayText(TextView view, String text) {
+        view.setText(text);
     }
 }
