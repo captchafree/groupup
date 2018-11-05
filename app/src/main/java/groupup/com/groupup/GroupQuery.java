@@ -76,4 +76,30 @@ public class GroupQuery {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
+    public static void updateUserWithID(String id, final User use) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
+
+        Query query = db.orderByChild("id").equalTo(id);
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key = dataSnapshot.getKey();
+                FirebaseDatabase.getInstance().getReference().child("users").child(key).setValue(use);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
 }
