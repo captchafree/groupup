@@ -5,8 +5,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class OutsiderGroupPage extends AppCompatActivity  {
+public class OutsiderGroupPage extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "OutsiderGroupPage";
     private Group currentGroup;
 
@@ -23,7 +25,7 @@ public class OutsiderGroupPage extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outsider_group_page);
-
+        findViewById(R.id.joinButton).setOnClickListener(this);
         getIncomingIntent();
     }
 
@@ -41,6 +43,45 @@ public class OutsiderGroupPage extends AppCompatActivity  {
 
             this.currentGroup = currentGroup;
             setImage(imageUrl, groupName, groupLocation, groupActivity);
+        }
+    }
+
+    public void onClick(View v) {
+        int i = v.getId();
+        boolean isMem = false;
+        final Group curr = this.currentGroup;
+        if (i == R.id.joinButton) {
+            if(this.currentGroup.getMembers().size() != 0) {
+                for (String uid : this.currentGroup.getMembers()) {
+                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        isMem = true;
+                    }
+                }
+                if(!isMem){
+                    GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
+                        @Override
+                        public void onCallback(Object value) {
+                            User user = (User) value;
+                            curr.addMember(user.getID());
+                            user.addGroup(curr.getID());
+                            GroupQuery.updateUserWithID(user.getID(), user);
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                        }
+                    });
+                }
+            }
+            else{
+                GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
+                    @Override
+                    public void onCallback(Object value) {
+                        User user = (User) value;
+                        curr.addMember(user.getID());
+                        user.addGroup(curr.getID());
+                        GroupQuery.updateUserWithID(user.getID(), user);
+                        FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
+                    }
+                });
+            }
         }
     }
 
