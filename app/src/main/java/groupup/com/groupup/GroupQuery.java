@@ -2,6 +2,7 @@ package groupup.com.groupup;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -13,7 +14,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 
 public class GroupQuery {
-
+    private static final String TAG = "GroupQuery";
     /**
      * Populates the results list with the groups that match the searchText
      * @param searchPage The page the search is occurring on
@@ -54,7 +55,7 @@ public class GroupQuery {
     public static void getUserWithID(String id, final Callback callback) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
 
-        Query query = db.orderByChild("id").equalTo(id);
+        Query query = db.orderByChild("id");
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -76,6 +77,38 @@ public class GroupQuery {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
+    public static void getGroupWithGroupID(final Homepage homepage, final String id, final ArrayList<Group> results) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("groups/");
+
+        Query query = db.orderByChild("name");
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+
+                if(group.getID().equals(id)) {
+                    results.add(group);
+                    homepage.refreshView();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
+
 
     public static void updateUserWithID(String id, final User use) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
