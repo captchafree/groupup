@@ -78,7 +78,7 @@ public class GroupQuery {
         });
     }
 
-    public static void getGroupWithGroupID(final Homepage homepage, final String id, final ArrayList<Group> results) {
+    public synchronized static void getGroupWithGroupID(final Homepage homepage, final String id, final ArrayList<Group> results) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("groups/");
 
         Query query = db.orderByChild("name");
@@ -90,8 +90,8 @@ public class GroupQuery {
 
                 if(group.getID().equals(id)) {
                     results.add(group);
-                    homepage.refreshView();
                 }
+                homepage.refreshView();
             }
 
             @Override
@@ -107,8 +107,6 @@ public class GroupQuery {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
-
-
 
     public static void updateUserWithID(String id, final User use) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
