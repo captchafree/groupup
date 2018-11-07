@@ -19,7 +19,6 @@ public class Homepage extends AppCompatActivity {
     private ArrayList<Group> results = new ArrayList<>();
 
     TextView view;
-    TextView groupList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class Homepage extends AppCompatActivity {
         CreateGroup_Button.setOnClickListener(new PageTransitionListener(this, CreateGroup.class));
 
         this.view = findViewById(R.id.userInformation);
-        this.groupList = findViewById(R.id.groupList);
 
         this.setupUserView(view);
 
@@ -68,12 +66,6 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void refreshView() {
-        String newText = "";
-        for(Group g : results) {
-            newText += "\n" + g.getName();
-        }
-        groupList.setText(newText);
-
         Log.d(TAG, "refreshView: " + results.size());
         this.initRecyclerView();
     }
