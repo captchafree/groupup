@@ -18,6 +18,8 @@ public class Homepage extends AppCompatActivity {
     private static final String TAG = "Homepage";
     private ArrayList<Group> results = new ArrayList<>();
 
+    TextView view;
+    TextView groupList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +32,10 @@ public class Homepage extends AppCompatActivity {
         GroupSearch_Button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
         CreateGroup_Button.setOnClickListener(new PageTransitionListener(this, CreateGroup.class));
 
-        this.setupUserView((TextView) findViewById(R.id.userInformation));
+        this.view = findViewById(R.id.userInformation);
+        this.groupList = findViewById(R.id.groupList);
 
-
+        this.setupUserView(view);
 
 
         if(results.size() > 0)
@@ -45,7 +48,6 @@ public class Homepage extends AppCompatActivity {
         GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
             @Override
             public void onCallback(Object value) {
-
                 User user = (User) value;
 
                 String text = "";
@@ -60,14 +62,24 @@ public class Homepage extends AppCompatActivity {
 
 
                 List<String> userGroupIDs = user.getGroups();
-                for(String groupID : userGroupIDs)
+                for(String groupID : userGroupIDs) {
                     GroupQuery.getGroupWithGroupID(homepage, groupID, results);
+                }
             }
         });
     }
 
     public void refreshView() {
-        this.initRecyclerView();
+        String newText = "";
+        for(Group g : results) {
+            newText += "\n" + g.getName();
+        }
+        groupList.setText(newText);
+
+        if(results.size() > 0) {
+            Log.d(TAG, "refreshView: " + results.size());
+            //this.initRecyclerView();
+        }
     }
 
     private void initRecyclerView() {
@@ -77,6 +89,4 @@ public class Homepage extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-
 }

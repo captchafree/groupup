@@ -20,6 +20,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.HashMap;
+
+import groupup.com.groupup.Authentication.Authenticator;
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GroupKeys;
+
 public class CreateGroup extends AppCompatActivity {
 
     private EditText editTextName;
@@ -40,10 +46,10 @@ public class CreateGroup extends AppCompatActivity {
          */
         databaseGroups = FirebaseDatabase.getInstance().getReference("groups");
 
-        editTextName = (EditText) findViewById(R.id.editTextName);
-        editTextActivity = (EditText) findViewById(R.id.editTextActivity);
-        editTextLocation = (EditText) findViewById(R.id.editTextLocation);
-        editTextPicture = (EditText) findViewById(R.id.editTextPicture);
+        editTextName = findViewById(R.id.editTextName);
+        editTextActivity = findViewById(R.id.editTextActivity);
+        editTextLocation = findViewById(R.id.editTextLocation);
+        editTextPicture = findViewById(R.id.editTextPicture);
         buttonAdd = findViewById(R.id.buttonAdd);
 
         /*
@@ -70,26 +76,19 @@ public class CreateGroup extends AppCompatActivity {
         String picture = (imageURL.length() == 0) ? "https://goo.gl/JTSgZX" : imageURL;
 
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
-            final String id = databaseGroups.push().getKey();
-            Group group = new Group(id, name, activity.toUpperCase(), location, picture);
-            FirebaseUser athUs = FirebaseAuth.getInstance().getCurrentUser();
-            group.setOwner(athUs.getUid());
-            group.addMember(athUs.getUid());
-            GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
-                @Override
-                public void onCallback(Object value) {
-                    User user = (User) value;
-                    user.addGroup(id);
-                    GroupQuery.updateUserWithID(user.getID(),user);
-                }
-            });
-            databaseGroups.child(id).setValue(group);
+
+            HashMap<GroupKeys, String> attributes = new HashMap<>();
+            attributes.put(GroupKeys.NAME, name);
+            attributes.put(GroupKeys.ACTIVITY, activity.toUpperCase());
+            attributes.put(GroupKeys.LOCATION, location);
+            attributes.put(GroupKeys.PICTURE, picture);
+
+            DatabaseManager manager = DatabaseManager.getInstance();
+            manager.addGroup(new Group(), attributes);
+
             Toast.makeText(this, "Group successfully added", Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
         }
     }
-
-
 }
