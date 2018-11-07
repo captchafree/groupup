@@ -13,7 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "OutsiderGroupPage";
+    private static final String TAG = "GroupProfile";
     private Group currentGroup;
 
     @Override

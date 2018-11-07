@@ -9,9 +9,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import groupup.com.groupup.Authentication.Authenticator;
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.GroupKeys;
+import groupup.com.groupup.Database.UserKeys;
 
 public class Homepage extends AppCompatActivity {
 
@@ -35,32 +43,49 @@ public class Homepage extends AppCompatActivity {
 
         this.setupUserView(view);
 
-        initRecyclerView();
+        //initRecyclerView();
 
     }
 
     private void setupUserView(final TextView view) {
         final Homepage homepage = this;
-        GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
+        final DatabaseManager db = DatabaseManager.getInstance();
+
+        String userID = Authenticator.getInstance().getCurrentUser().getUid();
+
+        db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
             @Override
-            public void onCallback(Object value) {
-                User user = (User) value;
+            public void onSuccess(DataSnapshot data) {
+                User user = data.getValue(User.class);
 
                 String text = "";
                 text += "Name: " + user.getName() + "\n";
                 text += "Email: " + user.getEmail() + "\n";
                 text += "Profile Image: " + user.getProfileImage() + "\n";
 
-                for(String groupID : user.getGroups()) {
-                    text += groupID + "\n";
-                }
                 view.setText(text);
 
 
                 List<String> userGroupIDs = user.getGroups();
                 for(String groupID : userGroupIDs) {
-                    GroupQuery.getGroupWithGroupID(homepage, groupID, results);
+                    db.getGroupWithIdentifier(GroupKeys.ID, groupID, new GetDataListener() {
+                        @Override
+                        public void onSuccess(DataSnapshot data) {
+                            results.add(data.getValue(Group.class));
+                            refreshView();
+                        }
+
+                        @Override
+                        public void onFailure(DatabaseError error) {
+
+                        }
+                    });
                 }
+            }
+
+            @Override
+            public void onFailure(DatabaseError error) {
+
             }
         });
     }
