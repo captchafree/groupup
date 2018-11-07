@@ -37,9 +37,7 @@ public class Homepage extends AppCompatActivity {
 
         this.setupUserView(view);
 
-
-        if(results.size() > 0)
-            initRecyclerView();
+        initRecyclerView();
 
     }
 
@@ -76,15 +74,13 @@ public class Homepage extends AppCompatActivity {
         }
         groupList.setText(newText);
 
-        if(results.size() > 0) {
-            Log.d(TAG, "refreshView: " + results.size());
-            //this.initRecyclerView();
-        }
+        Log.d(TAG, "refreshView: " + results.size());
+        this.initRecyclerView();
     }
 
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
-        RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
+        RecyclerView recyclerView = findViewById(R.id.homepage_recycview);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results, GroupProfile.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

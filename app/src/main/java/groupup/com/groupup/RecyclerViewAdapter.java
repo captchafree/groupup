@@ -31,6 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         mGroupNames = new ArrayList<String>();
         mImages = new ArrayList<String>();
+
         for(Group g : groups) {
             mGroupNames.add(g.getName());
             mImages.add(g.getPicture());
