@@ -37,16 +37,8 @@ public class Homepage extends AppCompatActivity  implements PopupMenu.OnMenuItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-
-        //GroupSearch_Button.setOnClickListener(new PageTransitionListener(this, GroupSearch.class));
-        //CreateGroup_Button.setOnClickListener(new PageTransitionListener(this, CreateGroup.class));
-
         this.view = findViewById(R.id.userInformation);
-
         this.setupUserView(view);
-
-        //initRecyclerView();
-
     }
 
     public void showPopup(View v){
