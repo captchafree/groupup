@@ -59,7 +59,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
                 intent = new Intent(this, CreateGroup.class);
                 break;
             case R.id.edit_profile:
-                intent = new Intent(this, GroupSearch.class);
+                intent = new Intent(this, EditUser.class);
                 break;
             default:
                 intent = new Intent(this, Homepage.class);

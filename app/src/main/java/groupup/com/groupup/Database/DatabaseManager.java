@@ -185,4 +185,34 @@ public class DatabaseManager {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
+
+    /**
+     * Updates the group object at a specified ID.
+     * @param id The id to update.
+     * @param group The new Group object to be set at the ID.
+     */
+    public void updateGroupWithID(final String id, final Group group) {
+        DatabaseReference db = database.child("groups/");
+        Query query = db.orderByChild("id").equalTo(id);
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key = dataSnapshot.getKey();
+                FirebaseDatabase.getInstance().getReference().child("groups").child(key).setValue(group);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
 }
