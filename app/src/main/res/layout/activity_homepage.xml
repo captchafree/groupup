@@ -10,10 +10,8 @@
         android:id="@+id/naviagtion_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/homepage_recycview"
         android:layout_alignBottom="@+id/userInformation"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="451dp"
         android:layout_marginBottom="11dp"
         android:onClick="showPopup"
         android:text="Navigate" />
