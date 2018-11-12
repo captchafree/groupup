@@ -25,7 +25,7 @@ import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.GroupKeys;
 import groupup.com.groupup.Database.UserKeys;
 
-public class Homepage extends AppCompatActivity  implements PopupMenu.OnMenuItemClickListener {
+public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = "Homepage";
     private ArrayList<Group> results = new ArrayList<>();
