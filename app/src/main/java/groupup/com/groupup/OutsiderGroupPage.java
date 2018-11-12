@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import groupup.com.groupup.Database.DatabaseManager;
+
 public class OutsiderGroupPage extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "OutsiderGroupPage";
     private Group currentGroup;
@@ -48,26 +50,22 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
     }
 
     public void onClick(View v) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         int i = v.getId();
         boolean isMem = false;
-        final Group curr = this.currentGroup;
+
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
+
         if (i == R.id.leaveButton) {
             if(this.currentGroup.getMembers().size() != 0) {
                 boolean found = false;
                 for (String uid : this.currentGroup.getMembers()) {
-                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    if(uid.equals(userID)){
                         found = true;
-                        GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
-                            @Override
-                            public void onCallback(Object value) {
-                                User user = (User) value;
-                                curr.removeMember(user.getID());
-                                user.removeGroup(curr.getID());
-                                GroupQuery.updateUserWithID(user.getID(), user);
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
-                                Toast.makeText(OutsiderGroupPage.this, "Left the group", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        currentGroup.removeMember(userID);
+                        manager.updateGroupWithID(currentGroup.getID(), currentGroup);
                     }
                 }
                 if(!found){
@@ -76,39 +74,15 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
             }
         }
         else if (i == R.id.joinButton) {
-            if(this.currentGroup.getMembers().size() != 0) {
-                for (String uid : this.currentGroup.getMembers()) {
-                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        isMem = true;
-                        Toast.makeText(OutsiderGroupPage.this, "You are already a member of this group", Toast.LENGTH_LONG).show();
-                    }
-                }
-                if(!isMem){
-                    GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
-                        @Override
-                        public void onCallback(Object value) {
-                            User user = (User) value;
-                            curr.addMember(user.getID());
-                            user.addGroup(curr.getID());
-                            GroupQuery.updateUserWithID(user.getID(), user);
-                            FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
-                            Toast.makeText(OutsiderGroupPage.this, "Joined the group", Toast.LENGTH_LONG).show();
-                        }
-                    });
+            for (String uid : this.currentGroup.getMembers()) {
+                if(uid.equals(userID)){
+                    isMem = true;
+                    Toast.makeText(OutsiderGroupPage.this, "You are already a member of this group", Toast.LENGTH_LONG).show();
                 }
             }
-            else{
-                GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
-                    @Override
-                    public void onCallback(Object value) {
-                        User user = (User) value;
-                        curr.addMember(user.getID());
-                        user.addGroup(curr.getID());
-                        GroupQuery.updateUserWithID(user.getID(), user);
-                        FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
-                        Toast.makeText(OutsiderGroupPage.this, "Joined the group", Toast.LENGTH_LONG).show();
-                    }
-                });
+            if(!isMem){
+                currentGroup.addMember(userID);
+                manager.updateGroupWithID(currentGroup.getID(), currentGroup);
             }
         }
     }
