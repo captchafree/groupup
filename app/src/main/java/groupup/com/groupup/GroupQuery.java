@@ -55,7 +55,7 @@ public class GroupQuery {
     public static void getUserWithID(String id, final Callback callback) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users/");
 
-        Query query = db.orderByChild("id");
+        Query query = db.orderByChild("id").equalTo(id);
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -81,7 +81,7 @@ public class GroupQuery {
     public synchronized static void getGroupWithGroupID(final Homepage homepage, final String id, final ArrayList<Group> results) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("groups/");
 
-        Query query = db.orderByChild("name");
+        Query query = db.orderByChild("name").equalTo(id);
 
         query.addChildEventListener(new ChildEventListener() {
             @Override

@@ -82,6 +82,9 @@ public class CreateGroup extends AppCompatActivity {
             attributes.put(GroupKeys.ACTIVITY, activity.toUpperCase());
             attributes.put(GroupKeys.LOCATION, location);
             attributes.put(GroupKeys.PICTURE, picture);
+            FirebaseUser curr = Authenticator.getInstance().getCurrentUser();
+            attributes.put(GroupKeys.OWNER, curr.getUid());
+            attributes.put(GroupKeys.MEMBERS, curr.getUid());
 
             DatabaseManager manager = DatabaseManager.getInstance();
             manager.addGroup(new Group(), attributes);
