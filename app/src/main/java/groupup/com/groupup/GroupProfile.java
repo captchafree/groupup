@@ -1,8 +1,11 @@
 package groupup.com.groupup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -82,24 +87,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         final TextView name = findViewById(R.id.group_description);
 
-        final StringBuilder membersText = new StringBuilder();
-
-        if(this.currentGroup.getMembers().size() != 0) {
-            for (String uid : this.currentGroup.getMembers()) {
-                GroupQuery.getUserWithID(uid, new Callback() {
-                    @Override
-                    public void onCallback(Object value) {
-                        User user = (User) value;
-                        System.out.println("name: " + user.getName());
-                        membersText.append("\n" + user.getName());
-
-                        setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers:" + membersText.toString());
-                    }
-                });
-            }
-        } else {
-            this.setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers: None");
-        }
+        setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation);
 
         ImageView image = findViewById(R.id.image);
 
@@ -107,6 +95,36 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 .asBitmap()
                 .load(imageUrl)
                 .into(image);
+
+        final Context myContext = this;
+        final ArrayList<String> groupMemberNames = new ArrayList<>();
+
+        groupMemberNames.add("elmo123");
+        groupMemberNames.add("bobross");
+
+        final RecyclerView recyclerView = findViewById(R.id.group_profile_recycview);
+        MemberListRVA adapter = new MemberListRVA(this, groupMemberNames);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        for (String uid : this.currentGroup.getMembers()) {
+            Log.d(TAG, "member uid: " + uid);
+
+            GroupQuery.getUserWithID(uid, new Callback() {
+                @Override
+                public void onCallback(Object value) {
+                    User user = (User) value;
+                    Log.d(TAG, "member found: " + user.getName());
+                    groupMemberNames.add(user.getName());
+                    MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
+                }
+            });
+        }
+
+        Log.d(TAG, "#members found: " + groupMemberNames.size());
+
     }
 
     private void setDisplayText(TextView view, String text) {

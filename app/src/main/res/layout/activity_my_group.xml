@@ -24,6 +24,15 @@
         android:textSize="20sp"
         android:textColor="#000"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/group_profile_recycview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/group_description"
+        android:layout_marginTop="0dp">
+
+    </android.support.v7.widget.RecyclerView>
+
     <Button
         android:id="@+id/leaveButton"
         android:layout_width="match_parent"

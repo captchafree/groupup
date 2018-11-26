@@ -47,7 +47,7 @@ public class GroupSearch extends AppCompatActivity {
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results, OutsiderGroupPage.class);
+        GroupRVA adapter = new GroupRVA(this, results, OutsiderGroupPage.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

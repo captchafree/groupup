@@ -8,11 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
@@ -44,7 +42,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
     public void showPopup(View v){
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.popup_nav);
+        popup.inflate(R.menu.nav_popup);
         popup.show();
     }
 
@@ -120,7 +118,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.homepage_recycview);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, results, GroupProfile.class);
+        GroupRVA adapter = new GroupRVA(this, results, GroupProfile.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
