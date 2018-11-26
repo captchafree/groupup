@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class GroupRVA extends RecyclerView.Adapter<GroupRVA.ViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "GroupRVA";
 
     private ArrayList<String> mGroupNames;
     private ArrayList<String> mImages;
@@ -27,7 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private Class nextPage;
 
-    public RecyclerViewAdapter(Context context, ArrayList<Group> groups, Class to){
+    public GroupRVA(Context context, ArrayList<Group> groups, Class to){
 
         mGroupNames = new ArrayList<String>();
         mImages = new ArrayList<String>();
