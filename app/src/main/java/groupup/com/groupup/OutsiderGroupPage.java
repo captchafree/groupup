@@ -28,7 +28,6 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outsider_group_page);
         findViewById(R.id.joinButton).setOnClickListener(this);
-        findViewById(R.id.leaveButton).setOnClickListener(this);
         getIncomingIntent();
     }
 
@@ -57,23 +56,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
 
         DatabaseManager manager = DatabaseManager.getInstance();
 
-
-        if (i == R.id.leaveButton) {
-            if(this.currentGroup.getMembers().size() != 0) {
-                boolean found = false;
-                for (String uid : this.currentGroup.getMembers()) {
-                    if(uid.equals(userID)){
-                        found = true;
-                        currentGroup.removeMember(userID);
-                        manager.updateGroupWithID(currentGroup.getID(), currentGroup);
-                    }
-                }
-                if(!found){
-                    Toast.makeText(OutsiderGroupPage.this, "You are not in this group", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-        else if (i == R.id.joinButton) {
+        if (i == R.id.joinButton) {
             for (String uid : this.currentGroup.getMembers()) {
                 if(uid.equals(userID)){
                     isMem = true;
@@ -84,6 +67,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
                 currentGroup.addMember(userID);
                 manager.updateGroupWithID(currentGroup.getID(), currentGroup);
             }
+            finish();
         }
     }
 
@@ -92,7 +76,7 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
 
         final TextView name = findViewById(R.id.group_description);
 
-        final StringBuilder membersText = new StringBuilder();
+        final FinalCounter memberCount = new FinalCounter(0);
 
         if(this.currentGroup.getMembers().size() != 0) {
             for (String uid : this.currentGroup.getMembers()) {
@@ -100,16 +84,19 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onCallback(Object value) {
                         User user = (User) value;
-                        System.out.println("name: " + user.getName());
-                        membersText.append("\n" + user.getName());
+                        Log.d(TAG, "name: " + user.getName());
+                        memberCount.increment();
+                        setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " +
+                                groupLocation + "\n\n" + memberCount.getVal() + " Members");
 
-                        setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers:" + membersText.toString());
                     }
                 });
             }
-        } else {
-            this.setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation + "\n\nMembers: None");
         }
+        else
+            setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " +
+                    groupLocation + "\n\n" + memberCount.getVal() + " Members");
+
 
         ImageView image = findViewById(R.id.image);
 
