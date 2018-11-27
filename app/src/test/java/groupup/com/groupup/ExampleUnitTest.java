@@ -1,6 +1,13 @@
 package groupup.com.groupup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import org.junit.Test;
+
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.UserKeys;
 
 import static org.junit.Assert.*;
 

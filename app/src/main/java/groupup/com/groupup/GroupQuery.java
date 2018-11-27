@@ -25,7 +25,7 @@ public class GroupQuery {
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("groups/");
 
-        Query query = database.orderByChild("name");//.equalTo(searchText.toUpperCase());
+        Query query = database.orderByChild("name");
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
