@@ -79,9 +79,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 this.currentGroup.removeMember(userID);
                 manager.updateGroupWithID(this.currentGroup.getID(), currentGroup);
             }
-            //finish();
-            //Intent intent = new Intent(this, Homepage.class);
-            //this.startActivity(intent);
+            finish();
         }
     }
 
