@@ -68,7 +68,7 @@ public class CreateGroup extends AppCompatActivity {
      * generate id and stores it in a Group object. Saves the group object under "groups"
      * If any of the string from name, activity or location are missing, return "Please fill in..."
      */
-    private void addGroup(){
+    private void addGroup() {
         String name = editTextName.getText().toString().trim();
         String activity = editTextActivity.getText().toString().trim();
         String location = editTextLocation.getText().toString().trim();
@@ -86,6 +86,7 @@ public class CreateGroup extends AppCompatActivity {
             attributes.put(GroupKeys.OWNER, curr.getUid());
             attributes.put(GroupKeys.MEMBERS, curr.getUid());
 
+
             DatabaseManager manager = DatabaseManager.getInstance();
             manager.addGroup(new Group(), attributes);
 
@@ -93,5 +94,7 @@ public class CreateGroup extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
         }
+
+        finish();
     }
 }
