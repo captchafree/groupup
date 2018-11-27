@@ -3,6 +3,7 @@ package groupup.com.groupup.Database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -11,10 +12,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import groupup.com.groupup.Authentication.Authenticator;
 import groupup.com.groupup.Group;
+import groupup.com.groupup.GroupSearch;
 import groupup.com.groupup.User;
 
 /**
@@ -200,6 +203,43 @@ public class DatabaseManager {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String key = dataSnapshot.getKey();
                 FirebaseDatabase.getInstance().getReference().child("groups").child(key).setValue(group);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
+    /**
+     * Populates the results list with the groups that match the searchText
+     * @param searchPage The page the search is occurring on
+     * @param searchText The text to search for in the database
+     * @param results A list of the groups that match the
+     */
+    public void getGroupsWithActivity(final GroupSearch searchPage, final String searchText, final ArrayList<Group> results) {
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("groups/");
+
+        Query query = database.orderByChild("name");
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+
+                if(group.getActivity().toUpperCase().contains(searchText.toUpperCase())) {
+                    results.add(group);
+                    searchPage.refreshView();
+                }
             }
 
             @Override

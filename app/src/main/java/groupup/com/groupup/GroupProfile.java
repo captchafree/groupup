@@ -76,16 +76,12 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         DatabaseManager manager = DatabaseManager.getInstance();
         if (i == R.id.leaveButton) {
             if(this.currentGroup.getMembers().size() != 0) {
-                for (String uid : this.currentGroup.getMembers()) {
-                    if(uid.equals(userID)){
-                        this.currentGroup.removeMember(userID);
-                        manager.updateGroupWithID(this.currentGroup.getID(), currentGroup);
-                    }
-                }
+                this.currentGroup.removeMember(userID);
+                manager.updateGroupWithID(this.currentGroup.getID(), currentGroup);
             }
-            finish();
-            Intent intent = new Intent(this, Homepage.class);
-            this.startActivity(intent);
+            //finish();
+            //Intent intent = new Intent(this, Homepage.class);
+            //this.startActivity(intent);
         }
     }
 
