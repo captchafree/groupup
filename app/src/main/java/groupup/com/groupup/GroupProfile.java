@@ -70,17 +70,35 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View v) {
         Log.d(TAG, "onClick: Button pressed");
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        int i = v.getId();
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DatabaseManager manager = DatabaseManager.getInstance();
-        if (i == R.id.leaveButton) {
-            if(this.currentGroup.getMembers().size() != 0) {
-                this.currentGroup.removeMember(userID);
-                manager.updateGroupWithID(this.currentGroup.getID(), currentGroup);
+        final Context context = this;
+        final int i = v.getId();
+        final Group curr = this.currentGroup;
+
+        final DatabaseManager manager = DatabaseManager.getInstance();
+        manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                User user = data.getValue(User.class);
+
+                if (i == R.id.leaveButton) {
+                    if(curr.getMembers().size() != 0) {
+                        user.removeGroup(curr.getID());
+                        curr.removeMember(userID);
+                        manager.updateUserWithID(userID, user);
+                        manager.updateGroupWithID(curr.getID(), currentGroup);
+                    }
+                    finish();
+                }
             }
-            finish();
-        }
+
+            @Override
+            public void onFailure(DatabaseError error) {
+
+            }
+        });
+
     }
 
     private synchronized void setImage(final String imageUrl, final String groupName, final String groupLocation, final String groupActivity){
