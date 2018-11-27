@@ -75,28 +75,8 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
         Log.d(TAG, "setImage: setting the image and name to widgets");
 
         final TextView name = findViewById(R.id.group_description);
-
-        final FinalCounter memberCount = new FinalCounter(0);
-
-        if(this.currentGroup.getMembers().size() != 0) {
-            for (String uid : this.currentGroup.getMembers()) {
-                GroupQuery.getUserWithID(uid, new Callback() {
-                    @Override
-                    public void onCallback(Object value) {
-                        User user = (User) value;
-                        Log.d(TAG, "name: " + user.getName());
-                        memberCount.increment();
-                        setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " +
-                                groupLocation + "\n\n" + memberCount.getVal() + " Members");
-
-                    }
-                });
-            }
-        }
-        else
-            setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " +
-                    groupLocation + "\n\n" + memberCount.getVal() + " Members");
-
+        setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " +
+                groupLocation + "\n\n" + this.currentGroup.getMembers().size() + " Members");
 
         ImageView image = findViewById(R.id.image);
 

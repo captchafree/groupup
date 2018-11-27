@@ -11,6 +11,9 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GroupKeys;
+
 public class GroupSearch extends AppCompatActivity {
 
     private static final String TAG = "GroupSearch";

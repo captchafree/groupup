@@ -84,8 +84,6 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 }
             }
             finish();
-            Intent intent = new Intent(this, Homepage.class);
-            this.startActivity(intent);
         }
     }
 
