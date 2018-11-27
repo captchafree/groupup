@@ -11,12 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.UserKeys;
 
 public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +36,8 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_my_group);
 
         getIncomingIntent();
+
+        findViewById(R.id.leaveButton).setOnClickListener(this);
 
         Button editGroup = findViewById(R.id.edit_group_button);
 
@@ -60,25 +69,23 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
+        Log.d(TAG, "onClick: Button pressed");
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         int i = v.getId();
-        final Group curr = this.currentGroup;
+
+        DatabaseManager manager = DatabaseManager.getInstance();
         if (i == R.id.leaveButton) {
             if(this.currentGroup.getMembers().size() != 0) {
                 for (String uid : this.currentGroup.getMembers()) {
-                    if(uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        GroupQuery.getUserWithID(FirebaseAuth.getInstance().getCurrentUser().getUid(), new Callback() {
-                            @Override
-                            public void onCallback(Object value) {
-                                User user = (User) value;
-                                curr.removeMember(user.getID());
-                                user.removeGroup(curr.getID());
-                                GroupQuery.updateUserWithID(user.getID(), user);
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(curr.getID()).setValue(curr);
-                            }
-                        });
+                    if(uid.equals(userID)){
+                        this.currentGroup.removeMember(userID);
+                        manager.updateGroupWithID(this.currentGroup.getID(), currentGroup);
                     }
                 }
             }
+            finish();
+            Intent intent = new Intent(this, Homepage.class);
+            this.startActivity(intent);
         }
     }
 
@@ -99,26 +106,31 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         final Context myContext = this;
         final ArrayList<String> groupMemberNames = new ArrayList<>();
 
-        groupMemberNames.add("elmo123");
-        groupMemberNames.add("bobross");
-
-        final RecyclerView recyclerView = findViewById(R.id.group_profile_recycview);
+        final RecyclerView recyclerView = findViewById(R.id.member_recyc);
         MemberListRVA adapter = new MemberListRVA(this, groupMemberNames);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+
         for (String uid : this.currentGroup.getMembers()) {
             Log.d(TAG, "member uid: " + uid);
 
-            GroupQuery.getUserWithID(uid, new Callback() {
+            manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
                 @Override
-                public void onCallback(Object value) {
-                    User user = (User) value;
+                public void onSuccess(DataSnapshot data) {
+                    User user = data.getValue(User.class);
                     Log.d(TAG, "member found: " + user.getName());
                     groupMemberNames.add(user.getName());
                     MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
+                }
+
+                @Override
+                public void onFailure(DatabaseError error) {
+
                 }
             });
         }
