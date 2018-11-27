@@ -12,12 +12,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.GroupKeys;
+import groupup.com.groupup.Database.UserKeys;
 
 public class OutsiderGroupPage extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "OutsiderGroupPage";
@@ -49,26 +55,45 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
     }
 
     public void onClick(View v) {
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        int i = v.getId();
-        boolean isMem = false;
+
+        final View finalV = v;
+        final Group curr = this.currentGroup;
+        final DatabaseManager manager = DatabaseManager.getInstance();
 
 
-        DatabaseManager manager = DatabaseManager.getInstance();
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if (i == R.id.joinButton) {
-            for (String uid : this.currentGroup.getMembers()) {
-                if(uid.equals(userID)){
-                    isMem = true;
-                    Toast.makeText(OutsiderGroupPage.this, "You are already a member of this group", Toast.LENGTH_LONG).show();
+        manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                User user = data.getValue(User.class);
+                int i = finalV.getId();
+                boolean isMem = false;
+
+                if (i == R.id.joinButton) {
+                    for (String uid : curr.getMembers()) {
+                        if(uid.equals(userID)){
+                            isMem = true;
+                            Toast.makeText(OutsiderGroupPage.this, "You are already a member of this group", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    if(!isMem){
+                        Log.d(TAG, "Member is being added");
+                        currentGroup.addMember(userID);
+                        user.addGroup(currentGroup.getID());
+                        manager.updateUserWithID(userID, user);
+                        manager.updateGroupWithID(currentGroup.getID(), currentGroup);
+                    }
+                    finish();
                 }
             }
-            if(!isMem){
-                currentGroup.addMember(userID);
-                manager.updateGroupWithID(currentGroup.getID(), currentGroup);
+
+            @Override
+            public void onFailure(DatabaseError error) {
+
             }
-            finish();
-        }
+        });
+
     }
 
     private synchronized void setImage(final String imageUrl, final String groupName, final String groupLocation, final String groupActivity){
