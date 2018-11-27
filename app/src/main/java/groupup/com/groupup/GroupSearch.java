@@ -12,7 +12,6 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 import groupup.com.groupup.Database.DatabaseManager;
-import groupup.com.groupup.Database.GroupKeys;
 
 public class GroupSearch extends AppCompatActivity {
 
@@ -60,6 +59,7 @@ public class GroupSearch extends AppCompatActivity {
     }
 
     private void search(String activity) {
-        GroupQuery.getGroupsWithActivity(this, activity, results);
+        DatabaseManager manager = DatabaseManager.getInstance();
+        manager.getGroupsWithActivity(this, activity, results);
     }
 }
