@@ -20,16 +20,12 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
 
     private volatile Group currentGroup;
 
-    public String groupID;
-
-    public EditGroup(String groupID) {
-        this.groupID = groupID;
-    }
+    private String groupID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user);
+        setContentView(R.layout.activity_edit_group);
 
         name = findViewById(R.id.edit_group_name);
         activity = findViewById(R.id.edit_group_activity);
@@ -39,12 +35,13 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
         save = findViewById(R.id.edit_group_save);
         save.setOnClickListener(this);
 
+        groupID = getIntent().getStringExtra("GROUP_ID");
+
         this.initView();
     }
 
     private void initView() {
         DatabaseManager manager = DatabaseManager.getInstance();
-        String groupID = "";
 
         manager.getGroupWithIdentifier(GroupKeys.ID, groupID, new GetDataListener() {
             @Override

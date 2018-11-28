@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import groupup.com.groupup.Authentication.Authenticator;
 import groupup.com.groupup.Database.DatabaseManager;
@@ -122,5 +123,4 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
 }

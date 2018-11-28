@@ -30,10 +30,20 @@ public class Authenticator {
         this.currentUser = auth.getCurrentUser();
     }
 
+    /**
+     * Returns the current logged-in user
+     * @return The current user
+     */
     public FirebaseUser getCurrentUser() {
         return this.currentUser;
     }
 
+    /**
+     * Creates a new account
+     * @param email The email to be associated with the account
+     * @param password The password to be associated with the account
+     * @param listener A listener called when the account is finished being created
+     */
     public void createAccount(final String email, final String password, final AuthCompletionListener listener) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -57,6 +67,12 @@ public class Authenticator {
                 });
     }
 
+    /**
+     * Attempts to log in a user with the specified credentials
+     * @param email The email address of the user
+     * @param password The password of the user
+     * @param listener A listener that is called when an attempt at signing in is completed
+     */
     public void signIn(final String email, final String password, final AuthCompletionListener listener) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -72,6 +88,9 @@ public class Authenticator {
                 });
     }
 
+    /**
+     * Logs the current user out
+     */
     public void signOut() {
         auth.signOut();
     }
