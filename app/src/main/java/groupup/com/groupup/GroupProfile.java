@@ -41,14 +41,18 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         Button editGroup = findViewById(R.id.edit_group_button);
 
-        /*final GroupProfile from = this;
         editGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditGroup to = new EditGroup(currentGroup.getID());
-                startActivity(new Intent(from, to.getClass()));
+                transitionToEditGroup();
             }
-        });*/
+        });
+    }
+
+    private void transitionToEditGroup() {
+        Intent intent = new Intent(this, EditGroup.class);
+        intent.putExtra("GROUP_ID", currentGroup.getID());
+        this.startActivity(intent);
     }
 
     private void getIncomingIntent(){
