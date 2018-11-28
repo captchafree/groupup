@@ -45,9 +45,6 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         leaveButton.setOnClickListener(this);
         viewWaitlist.setOnClickListener(this);
 
-
-
-
         if(currentGroup.isWaitlistGroup()){
             viewWaitlist.setVisibility(View.VISIBLE);
         }
