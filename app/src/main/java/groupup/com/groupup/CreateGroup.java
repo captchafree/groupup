@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class CreateGroup extends AppCompatActivity {
     private EditText editTextLocation;
     private EditText editTextPicture;
     private Button buttonAdd;
+    private CheckBox waitlistCheckbox;
 
     DatabaseReference databaseGroups;
 
@@ -51,6 +53,7 @@ public class CreateGroup extends AppCompatActivity {
         editTextLocation = findViewById(R.id.editTextLocation);
         editTextPicture = findViewById(R.id.editTextPicture);
         buttonAdd = findViewById(R.id.buttonAdd);
+        waitlistCheckbox = findViewById(R.id.waitlistCheckbox);
 
         /*
          * When "Create Group" button is clicked, do addGroup();
@@ -75,6 +78,9 @@ public class CreateGroup extends AppCompatActivity {
         String imageURL = editTextPicture.getText().toString().trim();
         String picture = (imageURL.length() == 0) ? "https://goo.gl/JTSgZX" : imageURL;
 
+
+        boolean checked = waitlistCheckbox.isChecked();
+
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
 
             HashMap<GroupKeys, String> attributes = new HashMap<>();
@@ -83,14 +89,16 @@ public class CreateGroup extends AppCompatActivity {
             attributes.put(GroupKeys.LOCATION, location);
             attributes.put(GroupKeys.PICTURE, picture);
 
+            Group createdGroup = new Group();
+            createdGroup.setWaitlistGroup(checked);
 
             DatabaseManager manager = DatabaseManager.getInstance();
-            manager.addGroup(new Group(), attributes);
+            manager.addGroup(createdGroup, attributes);
 
-            Toast.makeText(this, "Group successfully added", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Group successfully created", Toast.LENGTH_LONG).show();
         }
+        else
+            Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
 
         finish();
     }
