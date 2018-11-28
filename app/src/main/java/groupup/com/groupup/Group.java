@@ -22,14 +22,7 @@ public class Group implements Serializable {
      *  List of members that are currently in the group, stores user's unique IDs
      */
     private List<String> members = new ArrayList<>();
-
     private List<String> waitlistUsers = new ArrayList<>();
-
-    /**
-     *  List of leaders that are currently in the group, stores user's unique IDs
-     */
-    private List<String> leaders;
-
 
     public Group() {
         this.ID = "";
@@ -47,7 +40,6 @@ public class Group implements Serializable {
         this.picture = picture;
         this.owner = null;
         this.members = new ArrayList<>();
-        this.leaders = new ArrayList<>();
     }
 
     public void setID(String ID) {
@@ -97,11 +89,6 @@ public class Group implements Serializable {
     public void removeMember(String userID) { members.remove(userID); }
     public void removeWaitlistUser(String userID) { waitlistUsers.remove(userID); }
 
-    public List<String> getLeaders() { return leaders; }
-
-    public void addLeader(String... userID) { Collections.addAll(leaders, userID); }
-
-    public void removeLeader(String userID) { leaders.remove(userID); }
 
     @Override
     public String toString() {

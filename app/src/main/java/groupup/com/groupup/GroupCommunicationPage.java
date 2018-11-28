@@ -19,7 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.GroupKeys;
+import groupup.com.groupup.Database.UserKeys;
 
 public class GroupCommunicationPage extends AppCompatActivity {
 
@@ -40,7 +46,22 @@ public class GroupCommunicationPage extends AppCompatActivity {
         chat_text = (TextView) findViewById(R.id.textView);
 
         room_name = "Group Chat Test";
-        user_name = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        user_name = "TEMP";
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        final DatabaseManager db = DatabaseManager.getInstance();
+        db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                User user = data.getValue(User.class);
+                user_name = user.getName();
+            }
+
+            @Override
+            public void onFailure(DatabaseError error) {
+
+            }
+        });
         setTitle(" Room - " + room_name);
 
         chatroom = FirebaseDatabase.getInstance().getReference("chatrooms").child(room_name);
