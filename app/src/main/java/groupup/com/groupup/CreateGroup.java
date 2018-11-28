@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import groupup.com.groupup.Authentication.Authenticator;
 import groupup.com.groupup.Database.DatabaseManager;
@@ -33,8 +35,10 @@ public class CreateGroup extends AppCompatActivity {
     private EditText editTextLocation;
     private EditText editTextPicture;
     private Button buttonAdd;
+    private CheckBox waitlistCheckbox;
 
     DatabaseReference databaseGroups;
+    DatabaseReference chatroom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +49,14 @@ public class CreateGroup extends AppCompatActivity {
          * Saves data to "groups" tab in Firebase
          */
         databaseGroups = FirebaseDatabase.getInstance().getReference("groups");
+        chatroom = FirebaseDatabase.getInstance().getReference("chatrooms");
 
         editTextName = findViewById(R.id.editTextName);
         editTextActivity = findViewById(R.id.editTextActivity);
         editTextLocation = findViewById(R.id.editTextLocation);
         editTextPicture = findViewById(R.id.editTextPicture);
         buttonAdd = findViewById(R.id.buttonAdd);
+        waitlistCheckbox = findViewById(R.id.waitlistCheckbox);
 
         /*
          * When "Create Group" button is clicked, do addGroup();
@@ -75,6 +81,9 @@ public class CreateGroup extends AppCompatActivity {
         String imageURL = editTextPicture.getText().toString().trim();
         String picture = (imageURL.length() == 0) ? "https://goo.gl/JTSgZX" : imageURL;
 
+
+        boolean checked = waitlistCheckbox.isChecked();
+
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(activity) && !TextUtils.isEmpty(location)){
 
             HashMap<GroupKeys, String> attributes = new HashMap<>();
@@ -86,14 +95,21 @@ public class CreateGroup extends AppCompatActivity {
             attributes.put(GroupKeys.OWNER, curr.getUid());
             attributes.put(GroupKeys.MEMBERS, curr.getUid());
 
+            Group createdGroup = new Group();
+            createdGroup.setWaitlistGroup(checked);
 
             DatabaseManager manager = DatabaseManager.getInstance();
-            manager.addGroup(new Group(), attributes);
+            manager.addGroup(createdGroup, attributes);
 
-            Toast.makeText(this, "Group successfully added", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
+            // Create a chatroom for the group
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(name, "");
+            chatroom.updateChildren(map);
+
+            Toast.makeText(this, "Group successfully created", Toast.LENGTH_LONG).show();
         }
+        else
+            Toast.makeText(this, "Please fill in the missing information", Toast.LENGTH_LONG).show();
 
         finish();
     }

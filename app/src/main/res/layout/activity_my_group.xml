@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/group_description"
+        android:id="@+id/wlusers"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:text="test"
@@ -28,10 +28,22 @@
         android:id="@+id/member_recyc"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_below="@+id/group_description"
+        android:layout_below="@+id/wlusers"
         android:layout_marginTop="0dp">
 
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/edit_group_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Group" />
+
+    <Button
+        android:id="@+id/group_chat_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Group Chatroom" />
 
     <Button
         android:id="@+id/leaveButton"
@@ -40,9 +52,10 @@
         android:text="Leave Group" />
 
     <Button
-        android:id="@+id/edit_group_button"
+        android:id="@+id/viewWaitlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Group" />
+        android:visibility="invisible"
+        android:text="View Waitlist" />
 
 </LinearLayout>
