@@ -40,6 +40,8 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         Button viewWaitlist = findViewById(R.id.viewWaitlist);
         Button leaveButton = findViewById(R.id.leaveButton);
 
+        findViewById(R.id.group_chat_button).setOnClickListener(new PageTransitionListener(this, GroupCommunicationPage.class));
+
         leaveButton.setOnClickListener(this);
         viewWaitlist.setOnClickListener(this);
 

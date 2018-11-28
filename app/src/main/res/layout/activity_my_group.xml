@@ -34,16 +34,22 @@
     </android.support.v7.widget.RecyclerView>
 
     <Button
-        android:id="@+id/leaveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Leave Group" />
-
-    <Button
         android:id="@+id/edit_group_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Edit Group" />
+
+    <Button
+        android:id="@+id/group_chat_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Group Chatroom" />
+
+    <Button
+        android:id="@+id/leaveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Leave Group" />
 
     <Button
         android:id="@+id/viewWaitlist"
