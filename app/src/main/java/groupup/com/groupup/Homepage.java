@@ -1,5 +1,6 @@
 package groupup.com.groupup;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +29,6 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
     private static final String TAG = "Homepage";
     private ArrayList<Group> results = new ArrayList<>();
-
     TextView view;
 
     @Override
@@ -37,6 +37,16 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         setContentView(R.layout.activity_homepage);
 
         this.view = findViewById(R.id.userInformation);
+        this.setupUserView(view);
+    }
+
+    @Override
+    public void onRestart()
+    {  // After a pause OR at startup
+        super.onRestart();
+        Log.d(TAG, "onRestart: Refreshing user's list of groups");
+        this.view = findViewById(R.id.userInformation);
+        results.clear();
         this.setupUserView(view);
     }
 
@@ -67,18 +77,15 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         this.startActivity(intent);
         return true;
     }
-
+    
     private void setupUserView(final TextView view) {
-        final Homepage homepage = this;
         final DatabaseManager db = DatabaseManager.getInstance();
-
         String userID = Authenticator.getInstance().getCurrentUser().getUid();
 
         db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 User user = data.getValue(User.class);
-
                 String text = "";
                 text += "Name: " + user.getName() + "\n";
                 text += "Email: " + user.getEmail() + "\n";
