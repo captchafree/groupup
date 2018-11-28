@@ -1,7 +1,6 @@
 package groupup.com.groupup;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,20 +12,16 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder> {
+public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
 
     private static final String TAG = "MemberListRVA";
 
     private ArrayList<String> mMemberNames;
     private Context mContext;
 
-    public MemberListRVA(Context context, ArrayList<String> members){
+    public WaitlistRVA(Context context, ArrayList<String> members){
 
         mMemberNames = new ArrayList<String>();
 
@@ -64,16 +59,16 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.remove:
-                                //Removing a member
+                            case R.id.profile:
+                                //View user's profile
                                 Log.d(TAG, "Removing member: " + mMemberNames.get(position));
                                 return true;
-                            case R.id.ph1:
-                                //handle placeholder click
+                            case R.id.add:
+                                //Add user to the group
                                 Log.d(TAG, "Placeholder 1 clicked");
                                 return true;
-                            case R.id.ph2:
-                                //handle placeholder click
+                            case R.id.remove:
+                                //Remove user from the waitlist
                                 Log.d(TAG, "Placeholder 2 clicked");
                                 return true;
                             default:
@@ -81,10 +76,8 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                         }
                     }
                 });
-                popup.inflate(R.menu.member_popup);
+                popup.inflate(R.menu.waitlist_popup);
                 popup.show();
-
-
             }
         });
     }

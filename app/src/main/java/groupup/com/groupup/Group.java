@@ -8,45 +8,22 @@ import java.util.List;
 
 public class Group implements Serializable {
 
-    /**
-     *  Group ID to be retrieved from Firebase
-     */
+     /**Group ID to be retrieved from Firebase*/
     private String ID = null;
-
-    /**
-     *  Name of group
-     */
     private String name;
-
-    /**
-     *  Group's bio
-     */
     private String bio;
-
-    /**
-     *  Group's activity name
-     */
     private String activity;
-
-    /**
-     *  Group's location name
-     */
     private String location;
-
-    /**
-     *  Group's picture (taken in as URL link)
-     */
-    private String picture;
-
-    /**
-     *  Group's owner name
-     */
+    private String picture; //URL to a group's picture
     private String owner;
+    private boolean isWaitlistGroup;
 
     /**
      *  List of members that are currently in the group, stores user's unique IDs
      */
     private List<String> members = new ArrayList<>();
+
+    private List<String> waitlistUsers = new ArrayList<>();
 
     /**
      *  List of leaders that are currently in the group, stores user's unique IDs
@@ -118,6 +95,7 @@ public class Group implements Serializable {
     public void addMember(String... userID) { Collections.addAll(members, userID); }
 
     public void removeMember(String userID) { members.remove(userID); }
+    public void removeWaitlistUser(String userID) { waitlistUsers.remove(userID); }
 
     public List<String> getLeaders() { return leaders; }
 
@@ -128,5 +106,21 @@ public class Group implements Serializable {
     @Override
     public String toString() {
         return "Group info - {id: " + this.ID + "}, {name: " + this.name + "}, {location: " + this.location + "}, {activity: " + this.activity + "} {picture: " + this.picture + "}";
+    }
+
+    public List<String> getWaitlistUsers() {
+        return waitlistUsers;
+    }
+
+    public void addWaitlistUser(String userID) {
+        this.waitlistUsers.add(userID);
+    }
+
+    public boolean isWaitlistGroup() {
+        return isWaitlistGroup;
+    }
+
+    public void setWaitlistGroup(boolean waitlistGroup) {
+        isWaitlistGroup = waitlistGroup;
     }
 }

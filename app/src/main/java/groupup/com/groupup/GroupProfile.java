@@ -1,5 +1,6 @@
 package groupup.com.groupup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -37,9 +36,19 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         getIncomingIntent();
 
-        findViewById(R.id.leaveButton).setOnClickListener(this);
-
         Button editGroup = findViewById(R.id.edit_group_button);
+        Button viewWaitlist = findViewById(R.id.viewWaitlist);
+        Button leaveButton = findViewById(R.id.leaveButton);
+
+        leaveButton.setOnClickListener(this);
+        viewWaitlist.setOnClickListener(this);
+
+
+
+
+        if(currentGroup.isWaitlistGroup()){
+            viewWaitlist.setVisibility(View.VISIBLE);
+        }
 
         /*final GroupProfile from = this;
         editGroup.setOnClickListener(new View.OnClickListener() {
@@ -69,26 +78,36 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
-        Log.d(TAG, "onClick: Button pressed");
         final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         final Context context = this;
-        final int i = v.getId();
+        final int clickedButtonID = v.getId();
         final Group curr = this.currentGroup;
-
         final DatabaseManager manager = DatabaseManager.getInstance();
+
+
+
+        Log.d(TAG, "onClick: Button pressed" + clickedButtonID);
+
+        if(clickedButtonID == R.id.viewWaitlist){
+            Intent intent = new Intent(this, GroupWaitlistPage.class);
+            intent.putExtra("group", currentGroup);
+            this.startActivity(intent);
+        }
+
         manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 User user = data.getValue(User.class);
 
-                if (i == R.id.leaveButton) {
+                if (clickedButtonID == R.id.leaveButton) {
                     if(curr.getMembers().size() != 0) {
                         user.removeGroup(curr.getID());
                         curr.removeMember(userID);
                         manager.updateUserWithID(userID, user);
                         manager.updateGroupWithID(curr.getID(), currentGroup);
                     }
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
             }
@@ -104,9 +123,9 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     private synchronized void setImage(final String imageUrl, final String groupName, final String groupLocation, final String groupActivity){
         Log.d(TAG, "setImage: setting the image and name to widgets");
 
-        final TextView name = findViewById(R.id.group_description);
+        final TextView name = findViewById(R.id.wlusers);
 
-        setDisplayText(name, groupName + ": " + groupActivity + "\n\t At " + groupLocation);
+        setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " + groupLocation);
 
         ImageView image = findViewById(R.id.image);
 

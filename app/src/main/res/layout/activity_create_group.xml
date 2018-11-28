@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="97dp"
+        android:layout_marginBottom="48dp"
         android:text="Create Group"
         tools:layout_editor_absoluteX="129dp"
         tools:layout_editor_absoluteY="410dp" />
@@ -76,5 +76,14 @@
         android:ems="10"
         android:hint="Enter Group's Picture (URL)"
         android:inputType="textPersonName" />
+
+    <CheckBox
+        android:id="@+id/waitlistCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="118dp"
+        android:text="Waitlist" />
 
 </RelativeLayout>
