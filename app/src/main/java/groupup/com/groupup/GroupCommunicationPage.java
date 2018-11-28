@@ -45,7 +45,7 @@ public class GroupCommunicationPage extends AppCompatActivity {
         input_msg = (EditText) findViewById(R.id.msgSend);
         chat_text = (TextView) findViewById(R.id.textView);
 
-        room_name = "Group Chat Test";
+        room_name =  getIntent().getStringExtra("GROUP_NAME");
         user_name = "TEMP";
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

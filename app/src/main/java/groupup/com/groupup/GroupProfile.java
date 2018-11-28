@@ -40,7 +40,13 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         Button viewWaitlist = findViewById(R.id.viewWaitlist);
         Button leaveButton = findViewById(R.id.leaveButton);
 
-        findViewById(R.id.group_chat_button).setOnClickListener(new PageTransitionListener(this, GroupCommunicationPage.class));
+        Button groupChatButton = findViewById(R.id.group_chat_button);
+        groupChatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transitionToGroupChat();
+            }
+        });
 
         leaveButton.setOnClickListener(this);
         viewWaitlist.setOnClickListener(this);
@@ -55,6 +61,12 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 transitionToEditGroup();
             }
         });
+    }
+
+    private void transitionToGroupChat() {
+        Intent intent = new Intent(this, GroupCommunicationPage.class);
+        intent.putExtra("GROUP_NAME", currentGroup.getName());
+        this.startActivity(intent);
     }
 
     private void transitionToEditGroup() {
