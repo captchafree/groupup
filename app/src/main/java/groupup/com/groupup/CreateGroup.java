@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import groupup.com.groupup.Authentication.Authenticator;
 import groupup.com.groupup.Database.DatabaseManager;
@@ -37,6 +38,7 @@ public class CreateGroup extends AppCompatActivity {
     private CheckBox waitlistCheckbox;
 
     DatabaseReference databaseGroups;
+    DatabaseReference chatroom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class CreateGroup extends AppCompatActivity {
          * Saves data to "groups" tab in Firebase
          */
         databaseGroups = FirebaseDatabase.getInstance().getReference("groups");
+        chatroom = FirebaseDatabase.getInstance().getReference("chatrooms");
 
         editTextName = findViewById(R.id.editTextName);
         editTextActivity = findViewById(R.id.editTextActivity);
@@ -94,6 +97,11 @@ public class CreateGroup extends AppCompatActivity {
 
             DatabaseManager manager = DatabaseManager.getInstance();
             manager.addGroup(createdGroup, attributes);
+
+            // Create a chatroom for the group
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(name, "");
+            chatroom.updateChildren(map);
 
             Toast.makeText(this, "Group successfully created", Toast.LENGTH_LONG).show();
         }
