@@ -135,6 +135,21 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                             case R.id.viewprofile:
                                 //View a member's profile
                                 Log.d(TAG, "View Profile clicked");
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        Intent intent = new Intent(mContext, ViewUserProfile.class);
+                                        intent.putExtra("user", user);
+                                        mContext.startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
                                 return true;
                             default:
                                 return false;

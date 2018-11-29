@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -32,11 +35,11 @@
         <activity android:name=".GroupWaitlistPage" />
         <activity android:name=".CreateGroup" />
         <activity android:name=".EditUser" />
-        <activity android:name=".EditGroup"></activity>
+        <activity android:name=".EditGroup" />
+        <activity
+            android:name=".ViewUserProfile"
+            android:label="@string/title_activity_view_user_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
 </manifest>

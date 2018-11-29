@@ -1,5 +1,6 @@
 package groupup.com.groupup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,7 @@ import groupup.com.groupup.LocationServices.Location;
 import groupup.com.groupup.LocationServices.LocationServiceManager;
 import groupup.com.groupup.LocationServices.Permissions;
 
-public class User {
+public class User implements Serializable {
 
     //TODO: Save ID to shared preferences.
     private String ID = null;
