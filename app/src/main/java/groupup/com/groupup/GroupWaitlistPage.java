@@ -29,6 +29,9 @@ public class GroupWaitlistPage extends AppCompatActivity {
 
         getIncomingIntent();
 
+        setTitle(" Waitlist ");
+
+
     }
 
     private void getIncomingIntent(){

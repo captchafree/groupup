@@ -44,6 +44,8 @@ public class CreateGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+        setTitle(" Create Group ");
+
 
         /*
          * Saves data to "groups" tab in Firebase
