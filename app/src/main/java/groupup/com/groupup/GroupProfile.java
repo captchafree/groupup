@@ -32,6 +32,11 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "GroupProfile";
     private Group currentGroup;
 
+    /**
+     * Initializes the view with the groups information and sets the necessary listeners
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +45,6 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         //Retrieve the information send from the previous page
         getIncomingIntent();
         setTitle(" Group Profile ");
-
 
         Button groupChatButton = findViewById(R.id.group_chat_button);
         Button editGroup = findViewById(R.id.edit_group_button);
@@ -53,21 +57,22 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if(currentGroup.getOwner().equals(userID)){
+        if (currentGroup.getOwner().equals(userID)) {
             editGroup.setVisibility(View.VISIBLE);
             editGroup.setOnClickListener(this);
-            if(currentGroup.isWaitlistGroup()){
+            if (currentGroup.isWaitlistGroup()) {
                 viewWaitlist.setVisibility(View.VISIBLE);
                 viewWaitlist.setOnClickListener(this);
             }
-        }
-        else{
+        } else {
             leaveButton.setVisibility(View.VISIBLE);
             leaveButton.setOnClickListener(this);
         }
     }
 
-    //Refreshes the page after a child activity finishes
+    /**
+     * Refreshes the page after a child activity finishes
+     */
     @Override
     public void onRestart() {  // After a pause OR at startup
         super.onRestart();
@@ -90,49 +95,56 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * Transitions from one page to the next.
+     *
+     * @param nextPage The activity to transition to.
+     * @param toSend   The data to send to the next page.
+     */
     private void transitionToPage(Class nextPage, String toSend) {
         Intent intent;
-        if(toSend.equals("GROUP_NAME"))
-        {
+        if (toSend.equals("GROUP_NAME")) {
             intent = new Intent(this, nextPage);
             intent.putExtra(toSend, currentGroup.getName());
-        }
-        else if(toSend.equals("GROUP_ID"))
-        {
+        } else if (toSend.equals("GROUP_ID")) {
             intent = new Intent(this, nextPage);
             intent.putExtra(toSend, currentGroup.getID());
-        }
-        else
-        {
+        } else {
             intent = new Intent(this, GroupWaitlistPage.class);
             intent.putExtra("group", currentGroup);
         }
         this.startActivity(intent);
     }
 
+    /**
+     * Overrides onClick to satisfy the OnClickListener interface
+     *
+     * @param v the view that was clicked.
+     */
+    @Override
     public void onClick(View v) {
         final int clickedButtonID = v.getId();
         Log.d(TAG, "onClick: Button pressed" + clickedButtonID);
 
-        if(clickedButtonID == R.id.group_chat_button)
+        //Check which button was pressed
+        if (clickedButtonID == R.id.group_chat_button)
             this.transitionToPage(GroupCommunicationPage.class, "GROUP_NAME");
-        else if(clickedButtonID == R.id.edit_group_button)
+        else if (clickedButtonID == R.id.edit_group_button)
             this.transitionToPage(EditGroup.class, "GROUP_ID");
-        else if(clickedButtonID == R.id.viewWaitlist){
+        else if (clickedButtonID == R.id.viewWaitlist) {
             this.transitionToPage(GroupWaitlistPage.class, "group");
-        }
-        else
-        {
+        } else {
             final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final DatabaseManager manager = DatabaseManager.getInstance();
             final Group curr = this.currentGroup;
 
+            //Retrieve the current user and update their information
             manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
                 @Override
                 public void onSuccess(DataSnapshot data) {
                     User user = data.getValue(User.class);
 
-                    if(curr.getMembers().size()-1 != 0) {
+                    if (curr.getMembers().size() - 1 != 0) {
                         user.removeGroup(curr.getID());
                         curr.removeMember(userID);
                         manager.updateUserWithID(userID, user);
@@ -149,10 +161,12 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getIncomingIntent(){
+    /**
+     * Retrieves the previous intent that the user was on and retrieves any data that was sent from it.
+     */
+    private void getIncomingIntent() {
         Log.d(TAG, "getIncomingIntent: checking for incoming intents");
-        if(getIntent().hasExtra("group"))
-        {
+        if (getIntent().hasExtra("group")) {
             Log.d(TAG, "getIncomingIntent: found intent extras.");
 
             this.currentGroup = (Group) getIntent().getSerializableExtra("group");
@@ -160,7 +174,11 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private synchronized void refreshView(){
+    /**
+     * Refreshes the view with the updated information.
+     * This is called any time that firebase detects a change in data.
+     */
+    private synchronized void refreshView() {
         Log.d(TAG, "refreshView: setting the image and name to widgets");
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -177,6 +195,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " + groupLocation);
 
+        //Retrieve the group's profile image
         ImageView image = findViewById(R.id.image);
         Glide.with(this)
                 .asBitmap()
@@ -189,31 +208,37 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         DatabaseManager manager = DatabaseManager.getInstance();
 
+        //Display all the members of the group
         for (String uid : groupMemberIDs) {
             Log.d(TAG, "member uid: " + uid);
 
             manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                User user = data.getValue(User.class);
-                Log.d(TAG, "member found: " + user.getName());
-                groupMemberNames.add(user.getName());
-                MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
-            }
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    User user = data.getValue(User.class);
+                    Log.d(TAG, "member found: " + user.getName());
+                    groupMemberNames.add(user.getName());
+                    MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
+                }
 
-            @Override
-            public void onFailure(DatabaseError error) {
+                @Override
+                public void onFailure(DatabaseError error) {
 
-            }
+                }
             });
         }
 
         Log.d(TAG, "#members found: " + groupMemberNames.size());
-
     }
 
+    /**
+     * Sets the text of a specified view
+     *
+     * @param view The view to set the text of
+     * @param text The text to put in the view.
+     */
     private void setDisplayText(TextView view, String text) {
         view.setText(text);
     }
