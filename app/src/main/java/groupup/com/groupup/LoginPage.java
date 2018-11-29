@@ -40,7 +40,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         em = findViewById(R.id.login_name);
         pass = findViewById(R.id.login_2);
         mess = findViewById((R.id.signedInMess));
-        
+
         setTitle(" Login Page ");
 
     }
