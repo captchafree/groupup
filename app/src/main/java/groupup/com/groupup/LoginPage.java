@@ -27,6 +27,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
     private TextView mess;
 
     @Override
+    //default method called on creation. handles set up stuff
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
@@ -39,8 +40,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         em = findViewById(R.id.login_name);
         pass = findViewById(R.id.login_2);
         mess = findViewById((R.id.signedInMess));
-
-        this.runTests();
+        
         setTitle(" Login Page ");
 
     }
@@ -52,6 +52,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         updateUI(Authenticator.getInstance().getCurrentUser());
     }
 
+    //tries to create an account with the passed email and password. if succeeds, calls update ui. if fails, gives a fail message
     private void createAccount(final String email, String password) {
         final Authenticator auth = Authenticator.getInstance();
         auth.createAccount(email, password, new AuthCompletionListener() {
@@ -68,6 +69,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         });
     }
 
+    //tries to log in the user with the specified email and password. updates the ui on success, gives a message on fail
     public void signIn(String email, String password) {
         final Authenticator auth = Authenticator.getInstance();
         auth.signIn(email, password, new AuthCompletionListener() {
@@ -78,11 +80,13 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
 
             @Override
             public void onFailure() {
+                Toast.makeText(LoginPage.this, "Login failed.", Toast.LENGTH_SHORT).show();
                 updateUI(null);
             }
         });
     }
 
+    //displays the appropriate ui and info depending on whether or not the user is signed in
     private void updateUI(FirebaseUser user) {
         int loggedIn, loggedOut;
 
@@ -104,12 +108,14 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         findViewById((R.id.signedInMess)).setVisibility(loggedIn);
     }
 
+    //signs the user out of the app
     private void signOut() {
         Authenticator.getInstance().signOut();
         updateUI(null);
     }
 
     @Override
+    //handles the click events for everything but the page transition, calling the appropriate functions with the right info
     public void onClick(View view) {
         int buttonID = view.getId();
         if (buttonID == R.id.createAccountButton) {
@@ -122,20 +128,5 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         /*} else if (buttonID == R.id.verifyEmailButton) {
             sendEmailVerification();
         }*/
-    }
-
-    private void runTests() {
-        DatabaseManager manager = DatabaseManager.getInstance();
-
-        manager.getUserWithIdentifier(UserKeys.ID, "QpwspLnTQbWuoKfZBPrVYPg8UFg2", new GetDataListener() {
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                User user = data.getValue(User.class);
-                System.out.println("Retrieved user \"" + user.getName() + "\"");
-            }
-
-            @Override
-            public void onFailure(DatabaseError error) {}
-        });
     }
 }
