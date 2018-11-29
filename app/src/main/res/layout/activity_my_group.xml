@@ -37,6 +37,8 @@
         android:id="@+id/edit_group_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Edit Group" />
         android:layout_margin="2dp"
         android:background="@drawable/button_background"
         android:text="Edit Group"

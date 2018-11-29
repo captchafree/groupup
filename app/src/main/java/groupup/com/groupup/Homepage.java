@@ -1,6 +1,9 @@
 package groupup.com.groupup;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -162,8 +166,8 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         LocationServiceManager.LocationResult locationResult = new LocationServiceManager.LocationResult(){
             @Override
             public void gotLocation(Location location){
-                System.out.println("Latitude: " + location.getLatitude());
-                System.out.println("Longitude:" + location.getLongitude());
+                Log.d(TAG, "Latitude" +  location.getLatitude());
+                Log.d(TAG, "Longitude" +  location.getLongitude());
             }
         };
         LocationServiceManager location = new LocationServiceManager();

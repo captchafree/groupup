@@ -50,11 +50,16 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         //Set a listener to send the user to the group chat page when the button is pressed
         groupChatButton.setOnClickListener(this);
         leaveButton.setOnClickListener(this);
-        editGroup.setOnClickListener(this);
 
-        if(currentGroup.isWaitlistGroup()){
-            viewWaitlist.setVisibility(View.VISIBLE);
-            viewWaitlist.setOnClickListener(this);
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if(currentGroup.getOwner().equals(userID)){
+            editGroup.setVisibility(View.VISIBLE);
+            editGroup.setOnClickListener(this);
+            if(currentGroup.isWaitlistGroup()){
+                viewWaitlist.setVisibility(View.VISIBLE);
+                viewWaitlist.setOnClickListener(this);
+            }
         }
     }
 

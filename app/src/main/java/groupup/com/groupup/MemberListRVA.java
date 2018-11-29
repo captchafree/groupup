@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
@@ -69,6 +71,7 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                 Log.d(TAG, "OnClick: clicked on " + mMemberNames.get(position));
 
                 PopupMenu popup = new PopupMenu(mContext, v);
+
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -118,7 +121,16 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                         }
                     }
                 });
+
+                Menu menuOptions = popup.getMenu();
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
                 popup.inflate(R.menu.member_popup);
+                if(!mGroup.getOwner().equals(userID)){
+                    menuOptions.getItem(0).setVisible(false);
+                    menuOptions.getItem(1).setVisible(false);
+                }
                 popup.show();
 
 
