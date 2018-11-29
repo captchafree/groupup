@@ -74,7 +74,7 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                         switch (item.getItemId()) {
                             case R.id.profile:
                                 //View user's profile
-                                Log.d(TAG, "Removing member: " + mMemberNames.get(position));
+                                Log.d(TAG, "Viewing user's profile: " + mMemberNames.get(position));
                                 return true;
                             case R.id.add:
                                 //Add user to the group
