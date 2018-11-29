@@ -61,6 +61,10 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 viewWaitlist.setOnClickListener(this);
             }
         }
+        else{
+            leaveButton.setVisibility(View.VISIBLE);
+            leaveButton.setOnClickListener(this);
+        }
     }
 
     //Refreshes the page after a child activity finishes

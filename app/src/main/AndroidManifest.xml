@@ -36,10 +36,7 @@
         <activity android:name=".CreateGroup" />
         <activity android:name=".EditUser" />
         <activity android:name=".EditGroup" />
-        <activity
-            android:name=".ViewUserProfile"
-            android:label="@string/title_activity_view_user_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ViewUserProfile"></activity>
     </application>
 
 </manifest>
