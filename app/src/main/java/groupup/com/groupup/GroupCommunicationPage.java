@@ -29,8 +29,13 @@ import groupup.com.groupup.Database.UserKeys;
 
 public class GroupCommunicationPage extends AppCompatActivity {
 
+    // Send message button
     private Button send_msg;
+
+    // Type message field
     private EditText input_msg;
+
+    // View message field
     private TextView chat_text;
 
     private String user_name, room_name, temp_key;
@@ -45,10 +50,14 @@ public class GroupCommunicationPage extends AppCompatActivity {
         input_msg = (EditText) findViewById(R.id.msgSend);
         chat_text = (TextView) findViewById(R.id.textView);
 
+        // Set room name to the current group name
         room_name =  getIntent().getStringExtra("GROUP_NAME");
         user_name = "TEMP";
+
+        // Get current user ID from firebase
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        // Use database manager to get user's name from userID
         final DatabaseManager db = DatabaseManager.getInstance();
         db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
             @Override
@@ -64,8 +73,11 @@ public class GroupCommunicationPage extends AppCompatActivity {
         });
         setTitle(" Chatroom - " + room_name);
 
+        // Set chatroom to the room_name saved in firebase
         chatroom = FirebaseDatabase.getInstance().getReference("chatrooms").child(room_name);
 
+        // When send button is clicked, save message from text field and user_name to a map, and
+        // save to firebase
         send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -89,6 +101,7 @@ public class GroupCommunicationPage extends AppCompatActivity {
             }
         });
 
+        // If added, update the message field to show message
         chatroom.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -121,6 +134,8 @@ public class GroupCommunicationPage extends AppCompatActivity {
     }
 
     private String chat_msg, chat_user_name;
+
+    // Update message field to show message
     private void append_chat_conversation(DataSnapshot dataSnapshot) {
 
         Iterator i = dataSnapshot.getChildren().iterator();
