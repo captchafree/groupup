@@ -3,8 +3,8 @@
 
     <item android:id="@+id/remove"
         android:title="Remove from Group" />
-    <item android:id="@+id/ph1"
-        android:title="Placeholder1" />
-    <item android:id="@+id/ph2"
-        android:title="Placeholder2" />
+    <item android:id="@+id/promote"
+        android:title="Promote to Owner" />
+    <item android:id="@+id/viewprofile"
+        android:title="View Profile" />
 </menu>

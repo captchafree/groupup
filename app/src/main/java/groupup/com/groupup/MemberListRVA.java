@@ -1,8 +1,10 @@
 package groupup.com.groupup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,25 +16,32 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.UserKeys;
 
 public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder> {
 
     private static final String TAG = "MemberListRVA";
 
     private ArrayList<String> mMemberNames;
+    private List<String> mMemberIDs;
+    private Group mGroup;
     private Context mContext;
 
-    public MemberListRVA(Context context, ArrayList<String> members){
+    public MemberListRVA(Context context, ArrayList<String> members, List<String> memberIDs, Group group){
 
-        mMemberNames = new ArrayList<String>();
-
-        for(String s : members)
-            mMemberNames.add(s);
-
+        mMemberNames = members;
+        mMemberIDs = memberIDs;
+        mGroup = group;
         mContext = context;
     }
 
@@ -63,18 +72,46 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+
+                        final String clickedID = mMemberIDs.get(position);
+                        final DatabaseManager manager = DatabaseManager.getInstance();
+
                         switch (item.getItemId()) {
                             case R.id.remove:
                                 //Removing a member
                                 Log.d(TAG, "Removing member: " + mMemberNames.get(position));
+
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        if(mGroup.getMembers().size() != 0) {
+                                            user.removeGroup(mGroup.getID());
+                                            mGroup.removeMember(clickedID);
+
+                                            manager.updateUserWithID(clickedID, user);
+                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+
+                                            mMemberIDs.remove(clickedID);
+                                            mMemberNames.remove(user.getName());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
+
                                 return true;
-                            case R.id.ph1:
-                                //handle placeholder click
-                                Log.d(TAG, "Placeholder 1 clicked");
+                            case R.id.promote:
+                                //Promote a member to owner
+                                Log.d(TAG, "Promote to Owner clicked");
                                 return true;
-                            case R.id.ph2:
-                                //handle placeholder click
-                                Log.d(TAG, "Placeholder 2 clicked");
+                            case R.id.viewprofile:
+                                //View a member's profile
+                                Log.d(TAG, "View Profile clicked");
                                 return true;
                             default:
                                 return false;

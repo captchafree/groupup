@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
@@ -46,9 +47,10 @@ public class GroupWaitlistPage extends AppCompatActivity {
     {
         final Context myContext = this;
         final ArrayList<String> groupMemberNames = new ArrayList<>();
+        final List<String> groupMemberIDs = currentGroup.getWaitlistUsers();
 
         final RecyclerView recyclerView = findViewById(R.id.waitlist_recyc);
-        WaitlistRVA adapter = new WaitlistRVA(this, groupMemberNames);
+        WaitlistRVA adapter = new WaitlistRVA(this, groupMemberNames, groupMemberIDs, currentGroup);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -64,7 +66,7 @@ public class GroupWaitlistPage extends AppCompatActivity {
                     User user = data.getValue(User.class);
                     Log.d(TAG, "member found: " + user.getName());
                     groupMemberNames.add(user.getName());
-                    WaitlistRVA adapter = new WaitlistRVA(myContext, groupMemberNames);
+                    WaitlistRVA adapter = new WaitlistRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
                 }
