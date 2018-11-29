@@ -70,16 +70,21 @@ public class GroupCommunicationPage extends AppCompatActivity {
             @Override
             public void onClick(View view){
 
-                Map<String, Object> map = new HashMap<String, Object>();
-                temp_key = chatroom.push().getKey();
-                chatroom.updateChildren(map);
+                String myMessage = input_msg.getText().toString();
+                if(!myMessage.equals("") && myMessage.length() > 200)
+                {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    temp_key = chatroom.push().getKey();
+                    chatroom.updateChildren(map);
 
-                DatabaseReference message = chatroom.child(temp_key);
-                Map<String, Object> map2 = new HashMap<String, Object>();
-                map2.put("name", user_name);
-                map2.put("msg", input_msg.getText().toString());
+                    DatabaseReference message = chatroom.child(temp_key);
+                    Map<String, Object> map2 = new HashMap<String, Object>();
+                    map2.put("name", user_name);
+                    map2.put("msg", input_msg.getText().toString());
 
-                message.updateChildren(map2);
+                    message.updateChildren(map2);
+                    input_msg.setText("");
+                }
 
             }
         });

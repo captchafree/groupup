@@ -41,8 +41,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
     }
 
     @Override
-    public void onRestart()
-    {  // After a pause OR at startup
+    public void onRestart() {  // After a pause OR at startup
         super.onRestart();
         Log.d(TAG, "onRestart: Refreshing user's list of groups");
         this.view = findViewById(R.id.userInformation);
