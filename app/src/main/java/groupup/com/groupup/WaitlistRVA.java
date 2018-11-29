@@ -65,6 +65,8 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                 Log.d(TAG, "OnClick: clicked on " + mMemberNames.get(position));
 
                 PopupMenu popup = new PopupMenu(mContext, v);
+
+                //Listener for the popup menu
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -72,13 +74,16 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                         final String clickedID = mMemberIDs.get(position);
                         final DatabaseManager manager = DatabaseManager.getInstance();
 
+                        //Determine which button in the popup menu was pressed
                         switch (item.getItemId()) {
                             case R.id.profile:
                                 //View user's profile
                                 Log.d(TAG, "Viewing user's profile: " + mMemberNames.get(position));
+                                //Query for the user's information
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {
+                                        //Start the activity to view the user's information
                                         User user = data.getValue(User.class);
                                         Log.d(TAG, "member found: " + user.getName());
                                         Intent intent = new Intent(mContext, ViewUserProfile.class);
@@ -95,23 +100,24 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                             case R.id.add:
                                 //Add user to the group
                                 Log.d(TAG, "Add user to group");
+                                //Query for the user's information
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {
                                         User user = data.getValue(User.class);
                                         Log.d(TAG, "member found: " + user.getName());
-                                        if(mGroup.getMembers().size() != 0) {
 
-                                            user.addGroup(mGroup.getID());
-                                            mGroup.removeWaitlistUser(clickedID);
-                                            mGroup.addMember(clickedID);
+                                        //Remove the user from the waitlist, add them to the group
+                                        user.addGroup(mGroup.getID());
+                                        mGroup.removeWaitlistUser(clickedID);
+                                        mGroup.addMember(clickedID);
 
-                                            manager.updateUserWithID(clickedID, user);
-                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+                                        //Update the user and group in Firebase
+                                        manager.updateUserWithID(clickedID, user);
+                                        manager.updateGroupWithID(mGroup.getID(), mGroup);
 
-                                            mMemberIDs.remove(clickedID);
-                                            mMemberNames.remove(user.getName());
-                                        }
+                                        mMemberIDs.remove(clickedID);
+                                        mMemberNames.remove(user.getName());
                                     }
 
                                     @Override
@@ -129,14 +135,14 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                                     public void onSuccess(DataSnapshot data) {
                                         User user = data.getValue(User.class);
                                         Log.d(TAG, "member found: " + user.getName());
-                                        if(mGroup.getMembers().size() != 0) {
-                                            mGroup.removeWaitlistUser(clickedID);
 
-                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+                                        //Remove the uer from the waitlist and update the group
+                                        mGroup.removeWaitlistUser(clickedID);
 
-                                            mMemberIDs.remove(clickedID);
-                                            mMemberNames.remove(user.getName());
-                                        }
+                                        manager.updateGroupWithID(mGroup.getID(), mGroup);
+
+                                        mMemberIDs.remove(clickedID);
+                                        mMemberNames.remove(user.getName());
                                     }
 
                                     @Override
