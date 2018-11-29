@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +18,7 @@ import groupup.com.groupup.Database.UserKeys;
 public class EditUser extends AppCompatActivity implements View.OnClickListener {
 
     private EditText name, email;
+    private TextView bio;
     private Button save;
 
     private volatile User currentUser;
@@ -28,6 +30,8 @@ public class EditUser extends AppCompatActivity implements View.OnClickListener 
 
         name = findViewById(R.id.edit_user_name);
         email = findViewById(R.id.edit_user_email);
+        bio = findViewById(R.id.edit_user_bio);
+
         save = findViewById(R.id.edit_user_save);
         save.setOnClickListener(this);
 
@@ -45,6 +49,7 @@ public class EditUser extends AppCompatActivity implements View.OnClickListener 
 
                 name.setText(currentUser.getName());
                 email.setText(currentUser.getEmail());
+                bio.setText(currentUser.getBio());
             }
 
             @Override
@@ -55,6 +60,7 @@ public class EditUser extends AppCompatActivity implements View.OnClickListener 
     private void saveChanges() {
         currentUser.setName(name.getText().toString().trim());
         currentUser.setEmail(email.getText().toString().trim());
+        currentUser.setBio(bio.getText().toString().trim());
 
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.updateUserWithID(currentUser.getID(), currentUser);
