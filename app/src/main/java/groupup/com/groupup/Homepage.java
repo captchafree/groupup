@@ -2,6 +2,8 @@ package groupup.com.groupup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,8 @@ import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.GroupKeys;
 import groupup.com.groupup.Database.UserKeys;
+import groupup.com.groupup.LocationServices.LocationServiceManager;
+import groupup.com.groupup.LocationServices.Permissions;
 
 public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -38,6 +42,8 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
         this.view = findViewById(R.id.userInformation);
         this.setupUserView(view);
+
+        this.testLocationServices();
     }
 
     //Refreshes the page after a child activity finishes
@@ -123,6 +129,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
             }
         });
+
     }
 
     //Refreshes the recyclerview
@@ -140,5 +147,25 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         GroupRVA adapter = new GroupRVA(this, results, GroupProfile.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void testLocationServices() {
+        if(!Permissions.Check_FINE_LOCATION(this)) {
+            Permissions.Request_FINE_LOCATION(this,22);
+        }
+
+        if(!Permissions.Check_COARSE_LOCATION(this)) {
+            Permissions.Request_COARSE_LOCATION(this,22);
+        }
+
+        LocationServiceManager.LocationResult locationResult = new LocationServiceManager.LocationResult(){
+            @Override
+            public void gotLocation(Location location){
+                System.out.println("Latitude: " + location.getLatitude());
+                System.out.println("Longitude:" + location.getLongitude());
+            }
+        };
+        LocationServiceManager location = new LocationServiceManager();
+        location.getLocation(this, locationResult);
     }
 }

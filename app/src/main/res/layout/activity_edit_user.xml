@@ -35,4 +35,16 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="148dp" />
+
+    <EditText
+        android:id="@+id/edit_user_bio"
+        android:layout_width="217dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:hint="Bio"
+        android:inputType="textMultiLine"
+        app:layout_constraintTop_toBottomOf="@+id/edit_user_email"
+        tools:layout_editor_absoluteX="69dp" />
+
 </android.support.constraint.ConstraintLayout>
