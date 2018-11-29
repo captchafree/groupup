@@ -30,6 +30,8 @@ import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.UserKeys;
 
+import static java.security.AccessController.getContext;
+
 public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder> {
 
     private static final String TAG = "MemberListRVA";
@@ -68,9 +70,10 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 Log.d(TAG, "OnClick: clicked on " + mMemberNames.get(position));
 
-                PopupMenu popup = new PopupMenu(mContext, v);
+                final PopupMenu popup = new PopupMenu(mContext, v);
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -84,12 +87,15 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                                 //Removing a member
                                 Log.d(TAG, "Removing member: " + mMemberNames.get(position));
 
-                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
-                                    @Override
-                                    public void onSuccess(DataSnapshot data) {
-                                        User user = data.getValue(User.class);
-                                        Log.d(TAG, "member found: " + user.getName());
-                                        if(mGroup.getMembers().size() != 0) {
+                                //Don't allow owner to remove self
+                                if(!clickedID.equals(userID)) {
+                                    //Query for the user's information
+                                    manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                        @Override
+                                        public void onSuccess(DataSnapshot data) {
+                                            User user = data.getValue(User.class);
+                                            Log.d(TAG, "member found: " + user.getName());
+                                            //Remove the user and update the group/user information in Firebase
                                             user.removeGroup(mGroup.getID());
                                             mGroup.removeMember(clickedID);
 
@@ -99,30 +105,28 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                                             mMemberIDs.remove(clickedID);
                                             mMemberNames.remove(user.getName());
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(DatabaseError error) {
+                                        @Override
+                                        public void onFailure(DatabaseError error) {
 
-                                    }
-                                });
-
+                                        }
+                                    });
+                                }
                                 return true;
                             case R.id.promote:
                                 //Promote a member to owner
                                 Log.d(TAG, "Promote to Owner clicked");
+                                //Query for the user's information
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {
                                         User user = data.getValue(User.class);
                                         Log.d(TAG, "member found: " + user.getName());
-                                        if(mGroup.getMembers().size() != 0) {
-                                            mGroup.setOwner(clickedID);
-                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
 
-                                            Intent intent = new Intent(mContext, Homepage.class);
-                                            mContext.startActivity(intent);
-                                        }
+                                        //Change the owner and update the group in firebase
+                                        mGroup.setOwner(clickedID);
+                                        manager.updateGroupWithID(mGroup.getID(), mGroup);
+                                        ((Activity)mContext).finish();
                                     }
 
                                     @Override
@@ -138,6 +142,8 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {
+
+                                        //Start the activity to view the user's information
                                         User user = data.getValue(User.class);
                                         Log.d(TAG, "member found: " + user.getName());
                                         Intent intent = new Intent(mContext, ViewUserProfile.class);
@@ -158,17 +164,18 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                 });
 
                 Menu menuOptions = popup.getMenu();
-                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
                 popup.inflate(R.menu.member_popup);
+
+                //Hide the remove member and promote to owner options if the user isnt an owner
                 if(!mGroup.getOwner().equals(userID)){
                     menuOptions.getItem(0).setVisible(false);
                     menuOptions.getItem(1).setVisible(false);
                 }
+
+                //Display the popup menu
                 popup.show();
-
-
             }
         });
     }

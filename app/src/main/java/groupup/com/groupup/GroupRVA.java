@@ -70,9 +70,8 @@ public class GroupRVA extends RecyclerView.Adapter<GroupRVA.ViewHolder> {
             public void onClick(View v) {
                 Log.d(TAG, "OnClick: clicked on " + mGroupNames.get(position));
 
-                //Print the group's name on the user's screen
-                //Toast.makeText(mContext, mGroupNames.get(position), Toast.LENGTH_SHORT).show();
 
+                //Open the group's page
                 Intent intent = new Intent(mContext, nextPage);
                 intent.putExtra("group", mGroups.get(position));
                 mContext.startActivity(intent);

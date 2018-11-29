@@ -14,9 +14,11 @@ public class ViewUserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_profile);
 
+        setTitle("User Profile");
         getIncomingIntent();
     }
 
+    //Retrieve the data that was sent from the previous activity
     private void getIncomingIntent(){
         Log.d(TAG, "getIncomingIntent: checking for incoming intents");
         if(getIntent().hasExtra("user"))
@@ -28,6 +30,7 @@ public class ViewUserProfile extends AppCompatActivity {
         }
     }
 
+    //Display the user's information in a textview
     private void createView(){
         String text = "";
         text += "Name: " + user.getName() + "\n";
