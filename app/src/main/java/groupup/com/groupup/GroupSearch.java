@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,8 @@ public class GroupSearch extends AppCompatActivity {
     private static final String TAG = "GroupSearch";
 
     private ArrayList<Group> results = new ArrayList<>();
+
+    private ImageButton searchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,20 @@ public class GroupSearch extends AppCompatActivity {
         });
 
         search("");
+        setTitle(" Group Search ");
+
+
+        searchBtn = (ImageButton) findViewById(R.id.searchButton);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                results.clear();
+                refreshView();
+                search(searchField.getText().toString().trim());
+            }
+        });
+
     }
 
     private void initRecyclerView() {

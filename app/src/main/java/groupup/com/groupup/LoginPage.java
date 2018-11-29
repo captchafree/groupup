@@ -41,6 +41,8 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         mess = findViewById((R.id.signedInMess));
 
         this.runTests();
+        setTitle(" Login Page ");
+
     }
 
     @Override

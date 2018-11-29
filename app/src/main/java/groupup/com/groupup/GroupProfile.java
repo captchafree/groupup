@@ -39,6 +39,8 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         //Retrieve the information send from the previous page
         getIncomingIntent();
+        setTitle(" Group Profile ");
+
 
         Button groupChatButton = findViewById(R.id.group_chat_button);
         Button editGroup = findViewById(R.id.edit_group_button);

@@ -23,5 +23,8 @@ public class InterviewPage extends AppCompatActivity {
         input_msg = (EditText) findViewById(R.id.msgSend);
         chat_text = (TextView) findViewById(R.id.textView);
 
+        setTitle(" Waitlist Chatroom ");
+
+
     }
 }

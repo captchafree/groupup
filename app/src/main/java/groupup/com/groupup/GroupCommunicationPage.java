@@ -62,7 +62,7 @@ public class GroupCommunicationPage extends AppCompatActivity {
 
             }
         });
-        setTitle(" Room - " + room_name);
+        setTitle(" Chatroom - " + room_name);
 
         chatroom = FirebaseDatabase.getInstance().getReference("chatrooms").child(room_name);
 
@@ -71,7 +71,7 @@ public class GroupCommunicationPage extends AppCompatActivity {
             public void onClick(View view){
 
                 String myMessage = input_msg.getText().toString();
-                if(!myMessage.equals("") && myMessage.length() > 200)
+                if(!myMessage.equals("") && myMessage.length() < 200)
                 {
                     Map<String, Object> map = new HashMap<String, Object>();
                     temp_key = chatroom.push().getKey();

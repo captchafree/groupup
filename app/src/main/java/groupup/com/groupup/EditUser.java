@@ -36,6 +36,8 @@ public class EditUser extends AppCompatActivity implements View.OnClickListener 
         save.setOnClickListener(this);
 
         this.initView();
+        setTitle(" Edit User ");
+
     }
 
     private void initView() {
