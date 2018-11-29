@@ -23,6 +23,7 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
     private String groupID;
 
     @Override
+    //called when the page is first created. contains set up stuff
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
@@ -42,6 +43,7 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
 
     }
 
+    //creates the appropriate view information from the database
     private void initView() {
         DatabaseManager manager = DatabaseManager.getInstance();
 
@@ -61,6 +63,7 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
         });
     }
 
+    //saves the applied changes to the database
     private void saveChanges() {
         currentGroup.setName(name.getText().toString().trim());
         currentGroup.setActivity(activity.getText().toString().trim());
@@ -72,6 +75,7 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
     }
 
     @Override
+    //event listener for the save button on this page
     public void onClick(View v) {
         this.saveChanges();
     }
