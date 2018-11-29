@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.LocationServices.Location;
 import groupup.com.groupup.User;
 
 /**

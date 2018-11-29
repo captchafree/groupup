@@ -78,7 +78,7 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                                 return true;
                             case R.id.add:
                                 //Add user to the group
-                                Log.d(TAG, "Placeholder 1 clicked");
+                                Log.d(TAG, "Add user to group");
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {
@@ -107,7 +107,7 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                                 return true;
                             case R.id.remove:
                                 //Remove user from the waitlist
-                                Log.d(TAG, "Placeholder 2 clicked");
+                                Log.d(TAG, "Remove from waitlist clicked");
                                 manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
                                     @Override
                                     public void onSuccess(DataSnapshot data) {

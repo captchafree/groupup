@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import groupup.com.groupup.LocationServices.Location;
+import groupup.com.groupup.LocationServices.LocationServiceManager;
+import groupup.com.groupup.LocationServices.Permissions;
+
 public class User {
 
     //TODO: Save ID to shared preferences.
@@ -35,11 +39,15 @@ public class User {
      */
     private String profileImage;
 
+    private double latitude, longitude;
+
     public User(String name) {
         this.name = name;
-        this.bio = null;
+        this.bio = "";
         this.groups = new ArrayList<>();
         this.profileImage = null;
+
+        this.latitude = this.longitude = 0;
     }
 
     public User() {
@@ -96,5 +104,21 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

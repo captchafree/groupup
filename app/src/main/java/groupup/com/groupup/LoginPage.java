@@ -16,6 +16,9 @@ import groupup.com.groupup.Authentication.Authenticator;
 import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.UserKeys;
+import groupup.com.groupup.LocationServices.Location;
+import groupup.com.groupup.LocationServices.LocationServiceManager;
+import groupup.com.groupup.LocationServices.Permissions;
 
 public class LoginPage extends AppCompatActivity implements View.OnClickListener {
 
