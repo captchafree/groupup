@@ -105,6 +105,8 @@ public class EditUser extends AppCompatActivity implements View.OnClickListener 
 
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.updateUserWithID(currentUser.getID(), currentUser);
+
+        finish();
     }
 
     @Override
