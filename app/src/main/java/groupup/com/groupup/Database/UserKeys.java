@@ -5,6 +5,8 @@ public enum UserKeys {
     ID("id"),
     EMAIL("email"),
     NAME("name"),
+    LATITUDE("latitude"),
+    LONGITUDE("longitude"),
     GROUPS("groups");
 
     private final String key;

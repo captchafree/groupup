@@ -6,6 +6,9 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+/**
+ * Handles checking and requesting permissions from the user
+ */
 public class Permissions {
 
     public static void Request_STORAGE(Activity act,int code)

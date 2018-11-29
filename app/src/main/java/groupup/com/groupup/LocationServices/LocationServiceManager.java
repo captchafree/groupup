@@ -18,6 +18,12 @@ public class LocationServiceManager {
     boolean gps_enabled = false;
     boolean network_enabled = false;
 
+    /**
+     * Gets the most up to date location of the phone
+     * @param context The activity's context
+     * @param result The result of the querying for the location
+     * @return true if the location was able to be retrieved, false if the request timed out.
+     */
     public boolean getLocation(Context context, LocationResult result) {
 
         locationResult = result;
@@ -52,6 +58,9 @@ public class LocationServiceManager {
         return true;
     }
 
+    /**
+     * A listener that is called when a location is successfully returned via the GPS
+     */
     LocationListener locationListenerGps = new LocationListener() {
         public void onLocationChanged(Location location) {
             timer1.cancel();
@@ -70,6 +79,9 @@ public class LocationServiceManager {
         }
     };
 
+    /**
+     * A listener that is called when a location is successfully returned via the network
+     */
     LocationListener locationListenerNetwork = new LocationListener() {
         public void onLocationChanged(Location location) {
             timer1.cancel();
@@ -88,6 +100,9 @@ public class LocationServiceManager {
         }
     };
 
+    /**
+     * A class that returns the last location a user was at
+     */
     class GetLastLocation extends TimerTask {
 
         private Context context;
@@ -95,6 +110,9 @@ public class LocationServiceManager {
             this.context = context;
         }
 
+        /**
+         * Retrieves the current location of the phone
+         */
         @Override
         public void run() {
             lm.removeUpdates(locationListenerGps);
@@ -133,6 +151,9 @@ public class LocationServiceManager {
         }
     }
 
+    /**
+     * Override this method to use the result of querying for the phone's location
+     */
     public static abstract class LocationResult {
         public abstract void gotLocation(Location location);
     }

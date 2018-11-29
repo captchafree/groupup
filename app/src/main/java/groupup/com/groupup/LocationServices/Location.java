@@ -1,5 +1,8 @@
 package groupup.com.groupup.LocationServices;
 
+/**
+ * A basic representation of a location based on latitude and longitude
+ */
 public class Location {
 
     public double latitude, longitude;
