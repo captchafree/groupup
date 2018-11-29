@@ -72,6 +72,7 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
 
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.updateGroupWithID(currentGroup.getID(), currentGroup);
+        finish();
     }
 
     @Override
