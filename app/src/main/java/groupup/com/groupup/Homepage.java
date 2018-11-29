@@ -44,6 +44,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         this.setupUserView(view);
 
         this.testLocationServices();
+        setTitle(" Homepage ");
     }
 
     //Refreshes the page after a child activity finishes

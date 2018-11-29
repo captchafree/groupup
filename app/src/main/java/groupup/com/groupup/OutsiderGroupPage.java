@@ -28,6 +28,9 @@ public class OutsiderGroupPage extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_outsider_group_page);
         findViewById(R.id.joinButton).setOnClickListener(this);
         getIncomingIntent();
+
+        setTitle(" View Group ");
+
     }
 
     private void getIncomingIntent(){

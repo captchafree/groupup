@@ -38,6 +38,8 @@ public class EditGroup extends AppCompatActivity implements View.OnClickListener
         groupID = getIntent().getStringExtra("GROUP_ID");
 
         this.initView();
+        setTitle(" Edit Group ");
+
     }
 
     private void initView() {
