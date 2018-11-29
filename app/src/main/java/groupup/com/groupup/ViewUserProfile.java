@@ -7,6 +7,7 @@ public class ViewUserProfile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //yo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_profile);
     }
