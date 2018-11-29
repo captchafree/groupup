@@ -159,6 +159,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     private synchronized void refreshView(){
         Log.d(TAG, "refreshView: setting the image and name to widgets");
 
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final List<String> groupMemberIDs = this.currentGroup.getMembers();
         final RecyclerView recyclerView = findViewById(R.id.member_recyc);
         final ArrayList<String> groupMemberNames = new ArrayList<>();
@@ -188,20 +189,20 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
             Log.d(TAG, "member uid: " + uid);
 
             manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
-                @Override
-                public void onSuccess(DataSnapshot data) {
-                    User user = data.getValue(User.class);
-                    Log.d(TAG, "member found: " + user.getName());
-                    groupMemberNames.add(user.getName());
-                    MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
-                }
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                User user = data.getValue(User.class);
+                Log.d(TAG, "member found: " + user.getName());
+                groupMemberNames.add(user.getName());
+                MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
+            }
 
-                @Override
-                public void onFailure(DatabaseError error) {
+            @Override
+            public void onFailure(DatabaseError error) {
 
-                }
+            }
             });
         }
 

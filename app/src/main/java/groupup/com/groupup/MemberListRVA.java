@@ -111,10 +111,45 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                             case R.id.promote:
                                 //Promote a member to owner
                                 Log.d(TAG, "Promote to Owner clicked");
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        if(mGroup.getMembers().size() != 0) {
+                                            mGroup.setOwner(clickedID);
+                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+
+                                            Intent intent = new Intent(mContext, Homepage.class);
+                                            mContext.startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
+
                                 return true;
                             case R.id.viewprofile:
                                 //View a member's profile
                                 Log.d(TAG, "View Profile clicked");
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        Intent intent = new Intent(mContext, ViewUserProfile.class);
+                                        intent.putExtra("user", user);
+                                        mContext.startActivity(intent);
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
                                 return true;
                             default:
                                 return false;
