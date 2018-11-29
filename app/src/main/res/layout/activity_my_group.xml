@@ -61,6 +61,7 @@
         android:layout_margin="2dp"
         android:background="@drawable/button_background"
         android:text="Leave Group"
+        android:visibility="invisible"
         android:textColor="#FFFFFF"
         android:textSize="16dp" />
 
