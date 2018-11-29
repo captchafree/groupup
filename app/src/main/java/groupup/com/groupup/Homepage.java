@@ -106,7 +106,6 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
                 String text = "";
                 text += "Name: " + user.getName() + "\n";
                 text += "Email: " + user.getEmail() + "\n";
-                text += "Profile Image: " + user.getProfileImage() + "\n";
 
                 view.setText(text); //Display the user's information
                 List<String> userGroupIDs = user.getGroups();
