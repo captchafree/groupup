@@ -24,6 +24,7 @@ public class GroupSearch extends AppCompatActivity {
     private ImageButton searchBtn;
 
     @Override
+    //called on intial creation of the activity. contains set up and initiation things
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_search);
@@ -64,6 +65,7 @@ public class GroupSearch extends AppCompatActivity {
 
     }
 
+    //creates/updates the viewer object to handle the list of the groups being displayed
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
@@ -72,10 +74,12 @@ public class GroupSearch extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    //called when the list needs to be refreshed
     public void refreshView() {
         this.initRecyclerView();
     }
 
+    //called as text is added to the search bar, this function calls the database manager to search the database for groups with matching activities
     private void search(String activity) {
         DatabaseManager manager = DatabaseManager.getInstance();
         manager.getGroupsWithActivity(this, activity, results);
