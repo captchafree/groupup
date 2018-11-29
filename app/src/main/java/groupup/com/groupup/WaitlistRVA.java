@@ -12,21 +12,30 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import groupup.com.groupup.Database.DatabaseManager;
+import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.UserKeys;
 
 public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
 
     private static final String TAG = "MemberListRVA";
 
     private ArrayList<String> mMemberNames;
+    private List<String> mMemberIDs;
+    private Group mGroup;
     private Context mContext;
 
-    public WaitlistRVA(Context context, ArrayList<String> members){
+    public WaitlistRVA(Context context, ArrayList<String> members, List<String> memberIDs, Group group){
 
-        mMemberNames = new ArrayList<String>();
-
-        for(String s : members)
-            mMemberNames.add(s);
+        mMemberNames = members;
+        mMemberIDs = memberIDs;
+        mGroup = group;
 
         mContext = context;
     }
@@ -58,6 +67,10 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+
+                        final String clickedID = mMemberIDs.get(position);
+                        final DatabaseManager manager = DatabaseManager.getInstance();
+
                         switch (item.getItemId()) {
                             case R.id.profile:
                                 //View user's profile
@@ -66,10 +79,55 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                             case R.id.add:
                                 //Add user to the group
                                 Log.d(TAG, "Placeholder 1 clicked");
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        if(mGroup.getMembers().size() != 0) {
+
+                                            user.addGroup(mGroup.getID());
+                                            mGroup.removeWaitlistUser(clickedID);
+                                            mGroup.addMember(clickedID);
+
+                                            manager.updateUserWithID(clickedID, user);
+                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+
+                                            mMemberIDs.remove(clickedID);
+                                            mMemberNames.remove(user.getName());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
+
                                 return true;
                             case R.id.remove:
                                 //Remove user from the waitlist
                                 Log.d(TAG, "Placeholder 2 clicked");
+                                manager.getUserWithIdentifier(UserKeys.ID, clickedID, new GetDataListener() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot data) {
+                                        User user = data.getValue(User.class);
+                                        Log.d(TAG, "member found: " + user.getName());
+                                        if(mGroup.getMembers().size() != 0) {
+                                            mGroup.removeWaitlistUser(clickedID);
+
+                                            manager.updateGroupWithID(mGroup.getID(), mGroup);
+
+                                            mMemberIDs.remove(clickedID);
+                                            mMemberNames.remove(user.getName());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(DatabaseError error) {
+
+                                    }
+                                });
                                 return true;
                             default:
                                 return false;

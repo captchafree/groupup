@@ -18,7 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
@@ -115,7 +117,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                 User user = data.getValue(User.class);
 
                 if (clickedButtonID == R.id.leaveButton) {
-                    if(curr.getMembers().size() != 0) {
+                    if(curr.getMembers().size()-1 != 0) {
                         user.removeGroup(curr.getID());
                         curr.removeMember(userID);
                         manager.updateUserWithID(userID, user);
@@ -151,16 +153,17 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
 
         final Context myContext = this;
         final ArrayList<String> groupMemberNames = new ArrayList<>();
+        final List<String> groupMemberIDs = this.currentGroup.getMembers();
 
         final RecyclerView recyclerView = findViewById(R.id.member_recyc);
-        MemberListRVA adapter = new MemberListRVA(this, groupMemberNames);
+        MemberListRVA adapter = new MemberListRVA(this, groupMemberNames, groupMemberIDs, currentGroup);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         DatabaseManager manager = DatabaseManager.getInstance();
 
-        for (String uid : this.currentGroup.getMembers()) {
+        for (String uid : groupMemberIDs) {
             Log.d(TAG, "member uid: " + uid);
 
             manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
@@ -169,7 +172,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
                     User user = data.getValue(User.class);
                     Log.d(TAG, "member found: " + user.getName());
                     groupMemberNames.add(user.getName());
-                    MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames);
+                    MemberListRVA adapter = new MemberListRVA(myContext, groupMemberNames, groupMemberIDs, currentGroup);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(myContext));
                 }
