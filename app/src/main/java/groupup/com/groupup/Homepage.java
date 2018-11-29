@@ -109,7 +109,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
      */
     private void setupUserView(final TextView view) {
         final DatabaseManager db = DatabaseManager.getInstance();
-        String userID = Authenticator.getInstance().getCurrentUser().getUid();
+        final String userID = Authenticator.getInstance().getCurrentUser().getUid();
 
         //Query firebase the user's information
         db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
@@ -117,7 +117,16 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
             public void onSuccess(DataSnapshot data) {
                 User user = data.getValue(User.class);
                 String text = "";
-                text += "Name: " + user.getName() + "\n";
+
+                if(user.getName().equals(""))
+                {
+                    user.setName("");
+                    db.updateUserWithID(userID, user);
+                    text += "Name: Anonymous" + "\n";
+                }
+                else
+                    text += "Name: " + user.getName() + "\n";
+
                 text += "Email: " + user.getEmail() + "\n";
                 text += "Latitude: " + user.getLatitude() + "\n";
                 text += "Longitude: " + user.getLongitude() + "\n";
