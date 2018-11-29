@@ -24,6 +24,7 @@ import java.util.List;
 
 import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
+import groupup.com.groupup.Database.GroupKeys;
 import groupup.com.groupup.Database.UserKeys;
 
 public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
@@ -36,45 +37,105 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_group);
 
+        //Retrieve the information send from the previous page
         getIncomingIntent();
 
+        Button groupChatButton = findViewById(R.id.group_chat_button);
         Button editGroup = findViewById(R.id.edit_group_button);
         Button viewWaitlist = findViewById(R.id.viewWaitlist);
         Button leaveButton = findViewById(R.id.leaveButton);
 
-        Button groupChatButton = findViewById(R.id.group_chat_button);
-        groupChatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                transitionToGroupChat();
-            }
-        });
-
+        //Set a listener to send the user to the group chat page when the button is pressed
+        groupChatButton.setOnClickListener(this);
         leaveButton.setOnClickListener(this);
-        viewWaitlist.setOnClickListener(this);
+        editGroup.setOnClickListener(this);
 
         if(currentGroup.isWaitlistGroup()){
             viewWaitlist.setVisibility(View.VISIBLE);
+            viewWaitlist.setOnClickListener(this);
         }
+    }
 
-        editGroup.setOnClickListener(new View.OnClickListener() {
+    //Refreshes the page after a child activity finishes
+    @Override
+    public void onRestart() {  // After a pause OR at startup
+        super.onRestart();
+        Log.d(TAG, "onRestart: Refreshing user's list of groups");
+
+        //Query firebase for the group's updated information
+
+        DatabaseManager manager = DatabaseManager.getInstance();
+        manager.getGroupWithIdentifier(GroupKeys.ID, "", new GetDataListener() {
             @Override
-            public void onClick(View v) {
-                transitionToEditGroup();
+            public void onSuccess(DataSnapshot data) {
+                currentGroup = data.getValue(Group.class);
+                refreshView();
+            }
+
+            @Override
+            public void onFailure(DatabaseError error) {
+
             }
         });
     }
 
-    private void transitionToGroupChat() {
-        Intent intent = new Intent(this, GroupCommunicationPage.class);
-        intent.putExtra("GROUP_NAME", currentGroup.getName());
+    private void transitionToPage(Class nextPage, String toSend) {
+        Intent intent;
+        if(toSend.equals("GROUP_NAME"))
+        {
+            intent = new Intent(this, nextPage);
+            intent.putExtra(toSend, currentGroup.getName());
+        }
+        else if(toSend.equals("GROUP_ID"))
+        {
+            intent = new Intent(this, nextPage);
+            intent.putExtra(toSend, currentGroup.getID());
+        }
+        else
+        {
+            intent = new Intent(this, GroupWaitlistPage.class);
+            intent.putExtra("group", currentGroup);
+        }
         this.startActivity(intent);
     }
 
-    private void transitionToEditGroup() {
-        Intent intent = new Intent(this, EditGroup.class);
-        intent.putExtra("GROUP_ID", currentGroup.getID());
-        this.startActivity(intent);
+    public void onClick(View v) {
+        final int clickedButtonID = v.getId();
+        Log.d(TAG, "onClick: Button pressed" + clickedButtonID);
+
+        if(clickedButtonID == R.id.group_chat_button)
+            this.transitionToPage(GroupCommunicationPage.class, "GROUP_NAME");
+        else if(clickedButtonID == R.id.edit_group_button)
+            this.transitionToPage(EditGroup.class, "GROUP_ID");
+        else if(clickedButtonID == R.id.viewWaitlist){
+            this.transitionToPage(GroupWaitlistPage.class, "group");
+        }
+        else
+        {
+            final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final DatabaseManager manager = DatabaseManager.getInstance();
+            final Group curr = this.currentGroup;
+
+            manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    User user = data.getValue(User.class);
+
+                    if(curr.getMembers().size()-1 != 0) {
+                        user.removeGroup(curr.getID());
+                        curr.removeMember(userID);
+                        manager.updateUserWithID(userID, user);
+                        manager.updateGroupWithID(curr.getID(), currentGroup);
+                    }
+                    finish();
+                }
+
+                @Override
+                public void onFailure(DatabaseError error) {
+
+                }
+            });
+        }
     }
 
     private void getIncomingIntent(){
@@ -83,83 +144,36 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         {
             Log.d(TAG, "getIncomingIntent: found intent extras.");
 
-            Group currentGroup = (Group) getIntent().getSerializableExtra("group");
-            String imageUrl = currentGroup.getPicture();
-            String groupName = currentGroup.getName();
-            String groupLocation = currentGroup.getLocation();
-            String groupActivity = currentGroup.getActivity();
-
-            this.currentGroup = currentGroup;
-            setImage(imageUrl, groupName, groupLocation, groupActivity);
+            this.currentGroup = (Group) getIntent().getSerializableExtra("group");
+            refreshView();
         }
     }
 
-    public void onClick(View v) {
-        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final Context context = this;
-        final int clickedButtonID = v.getId();
-        final Group curr = this.currentGroup;
-        final DatabaseManager manager = DatabaseManager.getInstance();
+    private synchronized void refreshView(){
+        Log.d(TAG, "refreshView: setting the image and name to widgets");
 
-
-
-        Log.d(TAG, "onClick: Button pressed" + clickedButtonID);
-
-        if(clickedButtonID == R.id.viewWaitlist){
-            Intent intent = new Intent(this, GroupWaitlistPage.class);
-            intent.putExtra("group", currentGroup);
-            this.startActivity(intent);
-        }
-
-        manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                User user = data.getValue(User.class);
-
-                if (clickedButtonID == R.id.leaveButton) {
-                    if(curr.getMembers().size()-1 != 0) {
-                        user.removeGroup(curr.getID());
-                        curr.removeMember(userID);
-                        manager.updateUserWithID(userID, user);
-                        manager.updateGroupWithID(curr.getID(), currentGroup);
-                    }
-                    Intent returnIntent = new Intent();
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onFailure(DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    private synchronized void setImage(final String imageUrl, final String groupName, final String groupLocation, final String groupActivity){
-        Log.d(TAG, "setImage: setting the image and name to widgets");
-
+        final List<String> groupMemberIDs = this.currentGroup.getMembers();
+        final RecyclerView recyclerView = findViewById(R.id.member_recyc);
+        final ArrayList<String> groupMemberNames = new ArrayList<>();
         final TextView name = findViewById(R.id.wlusers);
+        final Context myContext = this;
+
+        String groupLocation = currentGroup.getLocation();
+        String groupActivity = currentGroup.getActivity();
+        String imageUrl = currentGroup.getPicture();
+        String groupName = currentGroup.getName();
 
         setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " + groupLocation);
 
         ImageView image = findViewById(R.id.image);
-
         Glide.with(this)
                 .asBitmap()
                 .load(imageUrl)
                 .into(image);
 
-        final Context myContext = this;
-        final ArrayList<String> groupMemberNames = new ArrayList<>();
-        final List<String> groupMemberIDs = this.currentGroup.getMembers();
-
-        final RecyclerView recyclerView = findViewById(R.id.member_recyc);
         MemberListRVA adapter = new MemberListRVA(this, groupMemberNames, groupMemberIDs, currentGroup);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         DatabaseManager manager = DatabaseManager.getInstance();
 

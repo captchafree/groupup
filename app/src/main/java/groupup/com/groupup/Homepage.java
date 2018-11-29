@@ -40,15 +40,19 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         this.setupUserView(view);
     }
 
+    //Refreshes the page after a child activity finishes
     @Override
     public void onRestart() {  // After a pause OR at startup
         super.onRestart();
         Log.d(TAG, "onRestart: Refreshing user's list of groups");
+
+        //Rebuild the list of groups the user is in
         this.view = findViewById(R.id.userInformation);
         results.clear();
         this.setupUserView(view);
     }
 
+    //Displays a popup menu when the Navigate button is pressed
     public void showPopup(View v){
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -56,31 +60,34 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         popup.show();
     }
 
+    //Listens for and handles a button in the popup menu to be clicked
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
         switch(item.getItemId()){
-            case R.id.search:
+            case R.id.search: //Navigate to the search page
                 intent = new Intent(this, GroupSearch.class);
                 break;
-            case R.id.create:
+            case R.id.create: //Navigate to the group creation page
                 intent = new Intent(this, CreateGroup.class);
                 break;
-            case R.id.edit_profile:
+            case R.id.edit_profile: //Navigate to the edit user profile page
                 intent = new Intent(this, EditUser.class);
                 break;
-            default:
+            default: //Refresh the homepage
                 intent = new Intent(this, Homepage.class);
 
         }
         this.startActivity(intent);
         return true;
     }
-    
+
+    //Query firebase for the users information and display it on the screen
     private void setupUserView(final TextView view) {
         final DatabaseManager db = DatabaseManager.getInstance();
         String userID = Authenticator.getInstance().getCurrentUser().getUid();
 
+        //Query firebase the user's information
         db.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
@@ -90,14 +97,15 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
                 text += "Email: " + user.getEmail() + "\n";
                 text += "Profile Image: " + user.getProfileImage() + "\n";
 
-                view.setText(text);
-
-
+                view.setText(text); //Display the user's information
                 List<String> userGroupIDs = user.getGroups();
+
+                //Query firebase to find the groups that the user is in
                 for(String groupID : userGroupIDs) {
                     db.getGroupWithIdentifier(GroupKeys.ID, groupID, new GetDataListener() {
                         @Override
                         public void onSuccess(DataSnapshot data) {
+                            //Add the group and refresh the page
                             results.add(data.getValue(Group.class));
                             refreshView();
                         }
@@ -117,14 +125,18 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         });
     }
 
+    //Refreshes the recyclerview
     public void refreshView() {
         Log.d(TAG, "refreshView: " + results.size());
         this.initRecyclerView();
     }
 
+    //Displays the user's list of groups in a recyclerview
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.homepage_recycview);
+
+        //Create an adapter to display the groups' information in a recyclerview
         GroupRVA adapter = new GroupRVA(this, results, GroupProfile.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
