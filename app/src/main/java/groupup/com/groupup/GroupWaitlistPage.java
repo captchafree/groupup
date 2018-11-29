@@ -56,8 +56,6 @@ public class GroupWaitlistPage extends AppCompatActivity {
         WaitlistRVA adapter = new WaitlistRVA(this, groupMemberNames, groupMemberIDs, currentGroup);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
         DatabaseManager manager = DatabaseManager.getInstance();
 
         for (String uid : this.currentGroup.getWaitlistUsers()) {
