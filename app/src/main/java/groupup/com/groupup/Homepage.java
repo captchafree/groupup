@@ -39,6 +39,9 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
     private ArrayList<Group> results = new ArrayList<>();
     TextView view;
 
+    /**
+     * Initializes the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +50,12 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         this.view = findViewById(R.id.userInformation);
         this.setupUserView(view);
 
-        this.testLocationServices();
         setTitle(" Homepage ");
     }
 
-    //Refreshes the page after a child activity finishes
+    /**
+     * Refreshes the page after a child activity finishes
+     */
     @Override
     public void onRestart() {  // After a pause OR at startup
         super.onRestart();
@@ -63,7 +67,9 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         this.setupUserView(view);
     }
 
-    //Displays a popup menu when the Navigate button is pressed
+    /**
+     * Displays a popup menu when the Navigate button is pressed
+     */
     public void showPopup(View v){
         PopupMenu popup = new PopupMenu(this, v);
         popup.setOnMenuItemClickListener(this);
@@ -71,7 +77,11 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         popup.show();
     }
 
-    //Listens for and handles a button in the popup menu to be clicked
+    /**
+     * Listens for and handles a button in the popup menu to be clicked
+     * @param item the button that was pressed in menu
+     * @return
+     */
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
@@ -93,7 +103,10 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         return true;
     }
 
-    //Query firebase for the users information and display it on the screen
+    /**
+     * Query firebase for the users information and display it on the screen.
+     * @param view the text view to display the user's information in.
+     */
     private void setupUserView(final TextView view) {
         final DatabaseManager db = DatabaseManager.getInstance();
         String userID = Authenticator.getInstance().getCurrentUser().getUid();
@@ -136,13 +149,17 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
     }
 
-    //Refreshes the recyclerview
+    /**
+     * Refreshes the recyclerview
+     */
     public void refreshView() {
         Log.d(TAG, "refreshView: " + results.size());
         this.initRecyclerView();
     }
 
-    //Displays the user's list of groups in a recyclerview
+    /**
+     * Displays the user's list of groups in a recyclerview
+     */
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerView.");
         RecyclerView recyclerView = findViewById(R.id.homepage_recycview);
@@ -151,25 +168,5 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         GroupRVA adapter = new GroupRVA(this, results, GroupProfile.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void testLocationServices() {
-        if(!Permissions.Check_FINE_LOCATION(this)) {
-            Permissions.Request_FINE_LOCATION(this,22);
-        }
-
-        if(!Permissions.Check_COARSE_LOCATION(this)) {
-            Permissions.Request_COARSE_LOCATION(this,22);
-        }
-
-        LocationServiceManager.LocationResult locationResult = new LocationServiceManager.LocationResult(){
-            @Override
-            public void gotLocation(Location location){
-                Log.d(TAG, "Latitude" +  location.getLatitude());
-                Log.d(TAG, "Longitude" +  location.getLongitude());
-            }
-        };
-        LocationServiceManager location = new LocationServiceManager();
-        location.getLocation(this, locationResult);
     }
 }
