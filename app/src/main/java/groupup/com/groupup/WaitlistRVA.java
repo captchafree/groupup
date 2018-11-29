@@ -69,7 +69,7 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
                 //Listener for the popup menu
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
+                    public boolean onMenuItemClick(MenuItem item){
 
                         final String clickedID = mMemberIDs.get(position);
                         final DatabaseManager manager = DatabaseManager.getInstance();

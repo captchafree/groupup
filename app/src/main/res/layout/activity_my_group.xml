@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/wlusers"
-        android:layout_width="140dp"
+        android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
