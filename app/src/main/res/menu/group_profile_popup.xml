@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:id="@+id/refresh"
+    android:title="Refresh Page" />
+<item android:id="@+id/leave"
+    android:title="Leave Group" />
+<item android:id="@+id/chat"
+    android:title="Group Chatroom" />
+<item android:id="@+id/edit"
+    android:title="Edit Group" />
+<item android:id="@+id/waitlist"
+    android:title="View Waitlist" />
+</menu>

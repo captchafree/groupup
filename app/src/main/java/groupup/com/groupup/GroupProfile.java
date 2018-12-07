@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +30,7 @@ import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.GroupKeys;
 import groupup.com.groupup.Database.UserKeys;
 
-public class GroupProfile extends AppCompatActivity implements View.OnClickListener {
+public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = "GroupProfile";
     private Group currentGroup;
@@ -45,29 +48,6 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         //Retrieve the information send from the previous page
         getIncomingIntent();
         setTitle(" Group Profile ");
-
-        Button groupChatButton = findViewById(R.id.group_chat_button);
-        Button editGroup = findViewById(R.id.edit_group_button);
-        Button viewWaitlist = findViewById(R.id.viewWaitlist);
-        Button leaveButton = findViewById(R.id.leaveButton);
-
-        //Set a listener to send the user to the group chat page when the button is pressed
-        groupChatButton.setOnClickListener(this);
-        leaveButton.setOnClickListener(this);
-
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        if (currentGroup.getOwner().equals(userID)) {
-            editGroup.setVisibility(View.VISIBLE);
-            editGroup.setOnClickListener(this);
-            if (currentGroup.isWaitlistGroup()) {
-                viewWaitlist.setVisibility(View.VISIBLE);
-                viewWaitlist.setOnClickListener(this);
-            }
-        } else {
-            leaveButton.setVisibility(View.VISIBLE);
-            leaveButton.setOnClickListener(this);
-        }
     }
 
     /**
@@ -117,48 +97,80 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Overrides onClick to satisfy the OnClickListener interface
-     *
-     * @param v the view that was clicked.
+     * Displays a popup menu when the Options button is pressed
+     */
+    public void showPopup(View v){
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        PopupMenu popup = new PopupMenu(this, v);
+
+        popup.setOnMenuItemClickListener(this);
+        Menu menuOptions = popup.getMenu();
+        popup.inflate(R.menu.group_profile_popup);
+
+
+        if (currentGroup.getOwner().equals(userID)) {
+            menuOptions.getItem(1).setVisible(false);
+            if (!currentGroup.isWaitlistGroup())
+                menuOptions.getItem(4).setVisible(false);
+        }
+        else {
+            menuOptions.getItem(3).setVisible(false);
+            menuOptions.getItem(4).setVisible(false);
+        }
+
+        popup.show();
+    }
+
+    /**
+     * Listens for and handles a button in the popup menu to be clicked
+     * @param item the button that was pressed in menu
+     * @return
      */
     @Override
-    public void onClick(View v) {
-        final int clickedButtonID = v.getId();
-        Log.d(TAG, "onClick: Button pressed" + clickedButtonID);
+    public boolean onMenuItemClick(MenuItem item) {
+        Intent intent;
+        switch(item.getItemId()){
+            case R.id.refresh: //Refresh the page
+                break;
+            case R.id.leave: //Leave the group
+                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final DatabaseManager manager = DatabaseManager.getInstance();
+                final Group curr = this.currentGroup;
+                //Retrieve the current user and update their information
+                manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
+                    @Override
+                    public void onSuccess(DataSnapshot data) {
+                        User user = data.getValue(User.class);
 
-        //Check which button was pressed
-        if (clickedButtonID == R.id.group_chat_button)
-            this.transitionToPage(GroupCommunicationPage.class, "GROUP_NAME");
-        else if (clickedButtonID == R.id.edit_group_button)
-            this.transitionToPage(EditGroup.class, "GROUP_ID");
-        else if (clickedButtonID == R.id.viewWaitlist) {
-            this.transitionToPage(GroupWaitlistPage.class, "group");
-        } else {
-            final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            final DatabaseManager manager = DatabaseManager.getInstance();
-            final Group curr = this.currentGroup;
-
-            //Retrieve the current user and update their information
-            manager.getUserWithIdentifier(UserKeys.ID, userID, new GetDataListener() {
-                @Override
-                public void onSuccess(DataSnapshot data) {
-                    User user = data.getValue(User.class);
-
-                    if (curr.getMembers().size() - 1 != 0) {
-                        user.removeGroup(curr.getID());
-                        curr.removeMember(userID);
-                        manager.updateUserWithID(userID, user);
-                        manager.updateGroupWithID(curr.getID(), currentGroup);
+                        if (curr.getMembers().size() - 1 != 0) {
+                            user.removeGroup(curr.getID());
+                            curr.removeMember(userID);
+                            manager.updateUserWithID(userID, user);
+                            manager.updateGroupWithID(curr.getID(), currentGroup);
+                        }
+                        finish();
                     }
-                    finish();
-                }
 
-                @Override
-                public void onFailure(DatabaseError error) {
+                    @Override
+                    public void onFailure(DatabaseError error) {
 
-                }
-            });
+                    }
+                });
+                break;
+            case R.id.chat: //Navigate to group chatroom
+                this.transitionToPage(GroupCommunicationPage.class, "GROUP_NAME");
+                break;
+            case R.id.edit: //Navigate to the edit group page
+                this.transitionToPage(EditGroup.class, "GROUP_ID");
+                break;
+            case R.id.waitlist: //Navigate to the group waitlist
+                this.transitionToPage(GroupWaitlistPage.class, "group");
+                break;
+            default:
+                return false;
+
         }
+        return true;
     }
 
     /**
@@ -185,7 +197,7 @@ public class GroupProfile extends AppCompatActivity implements View.OnClickListe
         final List<String> groupMemberIDs = this.currentGroup.getMembers();
         final RecyclerView recyclerView = findViewById(R.id.member_recyc);
         final ArrayList<String> groupMemberNames = new ArrayList<>();
-        final TextView name = findViewById(R.id.wlusers);
+        final TextView name = findViewById(R.id.group_info);
         final Context myContext = this;
 
         String groupLocation = currentGroup.getLocation();
