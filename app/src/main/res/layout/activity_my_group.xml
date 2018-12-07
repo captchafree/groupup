@@ -4,13 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:weightSum="100">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="70"
+        android:layout_weight="100"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
@@ -27,9 +28,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/member_recyc"
         android:layout_width="match_parent"
-        android:layout_height="137dp"
+        android:layout_height="130dp"
         android:layout_below="@+id/group_info"
-        android:layout_marginTop="0dp">
+        android:layout_marginTop="20dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -37,10 +38,8 @@
         android:id="@+id/options_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/member_recyc"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/button_background"
         android:layout_marginTop="22dp"
+        android:background="@drawable/button_background"
         android:onClick="showPopup"
         android:text="Options"
         android:textColor="#FFFFFF"

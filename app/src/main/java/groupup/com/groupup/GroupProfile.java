@@ -107,14 +107,14 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         Menu menuOptions = popup.getMenu();
         popup.inflate(R.menu.group_profile_popup);
 
-
+        //Hide options that an owner cant choose
         if (currentGroup.getOwner().equals(userID)) {
             menuOptions.getItem(1).setVisible(false);
             if (!currentGroup.isWaitlistGroup())
                 menuOptions.getItem(4).setVisible(false);
         }
-        else {
-            menuOptions.getItem(3).setVisible(false);
+        else { //Hide options that a nonowner cant choose
+            menuOptions.getItem(3).setVisible(false); //
             menuOptions.getItem(4).setVisible(false);
         }
 
