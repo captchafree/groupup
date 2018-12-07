@@ -164,8 +164,6 @@ public class MemberListRVA extends RecyclerView.Adapter<MemberListRVA.ViewHolder
                 });
 
                 Menu menuOptions = popup.getMenu();
-
-
                 popup.inflate(R.menu.member_popup);
 
                 //Hide the remove member and promote to owner options if the user isnt an owner

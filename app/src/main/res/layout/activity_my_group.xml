@@ -4,18 +4,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:weightSum="100">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_weight="70"
+        android:layout_height="wrap_content"
+        android:layout_weight="100"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/wlusers"
+        android:id="@+id/group_info"
         android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -27,53 +28,21 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/member_recyc"
         android:layout_width="match_parent"
-        android:layout_height="137dp"
-        android:layout_below="@+id/wlusers"
-        android:layout_marginTop="0dp">
+        android:layout_height="130dp"
+        android:layout_below="@+id/group_info"
+        android:layout_marginTop="20dp">
 
     </android.support.v7.widget.RecyclerView>
 
     <Button
-        android:id="@+id/edit_group_button"
-        android:layout_width="match_parent"
+        android:id="@+id/options_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_margin="2dp"
+        android:layout_marginTop="22dp"
         android:background="@drawable/button_background"
-        android:text="Edit Group"
+        android:onClick="showPopup"
+        android:text="Options"
         android:textColor="#FFFFFF"
         android:textSize="16dp" />
-
-    <Button
-        android:id="@+id/group_chat_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="@drawable/button_background"
-        android:text="Group Chatroom"
-        android:textColor="#FFFFFF"
-        android:textSize="16dp" />
-
-    <Button
-        android:id="@+id/leaveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="@drawable/button_background"
-        android:text="Leave Group"
-        android:visibility="invisible"
-        android:textColor="#FFFFFF"
-        android:textSize="16dp" />
-
-    <Button
-        android:id="@+id/viewWaitlist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="@drawable/button_background"
-        android:text="View Waitlist"
-        android:textColor="#FFFFFF"
-        android:textSize="16dp"
-        android:visibility="invisible" />
 
 </LinearLayout>
