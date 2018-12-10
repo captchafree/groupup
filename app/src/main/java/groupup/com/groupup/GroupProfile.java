@@ -207,7 +207,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         String imageUrl = currentGroup.getPicture();
         String groupName = currentGroup.getName();
 
-        setDisplayText(name, "  " + groupName + ": " + groupActivity + "\n\t Location: " + groupLocation);
+        setDisplayText(name, groupName + ": " + groupActivity + "\n\t Location: " + groupLocation);
 
         //Retrieve the group's profile image
         ImageView image = findViewById(R.id.image);
