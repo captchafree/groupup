@@ -86,6 +86,9 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
         switch(item.getItemId()){
+            case R.id.refresh:
+                this.onRestart();
+                return true;
             case R.id.search: //Navigate to the search page
                 intent = new Intent(this, GroupSearch.class);
                 break;
@@ -120,7 +123,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
                 if(user.getName().equals(""))
                 {
-                    user.setName("");
+                    user.setName("Anonymous");
                     db.updateUserWithID(userID, user);
                     text += "Name: Anonymous" + "\n";
                 }
