@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.bumptech.glide.util.LogTime;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +19,7 @@ import groupup.com.groupup.Database.DatabaseManager;
 import groupup.com.groupup.Database.GetDataListener;
 import groupup.com.groupup.Database.UserKeys;
 
-public class GroupWaitlistPage extends AppCompatActivity {
+public class GroupWaitlistPage extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "GroupWaitlistPage";
     Group currentGroup;
     @Override
@@ -26,12 +27,20 @@ public class GroupWaitlistPage extends AppCompatActivity {
         //Waitlist of potential applicants
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_potential_group_page);
+        findViewById((R.id.refreshButton)).setOnClickListener(this);
 
         getIncomingIntent();
 
         setTitle(" Waitlist ");
 
 
+    }
+
+    public void onClick(View view){
+        int buttonId = view.getId();
+        if(buttonId == R.id.refreshButton){
+            recreate();
+        }
     }
 
     private void getIncomingIntent(){

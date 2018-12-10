@@ -1,6 +1,5 @@
 package groupup.com.groupup;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +130,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         Intent intent;
         switch(item.getItemId()){
             case R.id.refresh: //Refresh the page
+                recreate();
                 break;
             case R.id.leave: //Leave the group
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -199,6 +199,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         final ArrayList<String> groupMemberNames = new ArrayList<>();
         final TextView name = findViewById(R.id.group_info);
         final Context myContext = this;
+
 
         String groupLocation = currentGroup.getLocation();
         String groupActivity = currentGroup.getActivity();
