@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -131,6 +132,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         Intent intent;
         switch(item.getItemId()){
             case R.id.refresh: //Refresh the page
+                recreate();
                 break;
             case R.id.leave: //Leave the group
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -199,6 +201,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         final ArrayList<String> groupMemberNames = new ArrayList<>();
         final TextView name = findViewById(R.id.group_info);
         final Context myContext = this;
+
 
         String groupLocation = currentGroup.getLocation();
         String groupActivity = currentGroup.getActivity();

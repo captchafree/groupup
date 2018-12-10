@@ -118,6 +118,7 @@ public class WaitlistRVA extends RecyclerView.Adapter<WaitlistRVA.ViewHolder> {
 
                                         mMemberIDs.remove(clickedID);
                                         mMemberNames.remove(user.getName());
+
                                     }
 
                                     @Override
