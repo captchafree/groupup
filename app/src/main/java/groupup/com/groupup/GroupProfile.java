@@ -60,7 +60,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         //Query firebase for the group's updated information
 
         DatabaseManager manager = DatabaseManager.getInstance();
-        manager.getGroupWithIdentifier(GroupKeys.ID, "", new GetDataListener() {
+        manager.getGroupWithIdentifier(GroupKeys.ID, currentGroup.getID(), new GetDataListener() {
             @Override
             public void onSuccess(DataSnapshot data) {
                 currentGroup = data.getValue(Group.class);
@@ -130,7 +130,8 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
         Intent intent;
         switch(item.getItemId()){
             case R.id.refresh: //Refresh the page
-                recreate();
+                //recreate();
+                onRestart();
                 break;
             case R.id.leave: //Leave the group
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
