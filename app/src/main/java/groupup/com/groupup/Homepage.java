@@ -120,7 +120,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
 
                 if(user.getName().equals(""))
                 {
-                    user.setName("");
+                    user.setName("Anonymous");
                     db.updateUserWithID(userID, user);
                     text += "Name: Anonymous" + "\n";
                 }

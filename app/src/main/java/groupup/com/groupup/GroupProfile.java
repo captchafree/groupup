@@ -132,6 +132,7 @@ public class GroupProfile extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.refresh: //Refresh the page
                 //recreate();
                 onRestart();
+                this.onRestart();
                 break;
             case R.id.leave: //Leave the group
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
