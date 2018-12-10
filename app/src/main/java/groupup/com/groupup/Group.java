@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Group implements Serializable {
@@ -109,5 +110,18 @@ public class Group implements Serializable {
 
     public void setWaitlistGroup(boolean waitlistGroup) {
         isWaitlistGroup = waitlistGroup;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return o.hashCode() == this.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return ID.hashCode();
     }
 }
