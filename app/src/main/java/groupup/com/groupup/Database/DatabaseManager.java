@@ -234,12 +234,79 @@ public class DatabaseManager {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Group group = dataSnapshot.getValue(Group.class);
+                final Group group = dataSnapshot.getValue(Group.class);
 
-                if(group.getActivity().toUpperCase().contains(searchText.toUpperCase())) {
-                    results.add(group);
-                    searchPage.refreshView();
-                }
+                DatabaseManager manager = DatabaseManager.getInstance();
+                String uid = Authenticator.getInstance().getCurrentUser().getUid();
+
+                manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
+                    @Override
+                    public void onSuccess(DataSnapshot data) {
+                        User currentUser = data.getValue(User.class);
+
+                        if(group.getActivity().toUpperCase().contains(searchText.toUpperCase()) && !currentUser.getGroups().contains(group.getID())) {
+                            results.add(group);
+                            searchPage.refreshView();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
+    /**
+     * Populates the results list with the groups that match the searchText
+     * @param searchPage The page the search is occurring on
+     * @param searchText The text to search for in the database
+     * @param results A list of the groups that match the
+     */
+    public void getGroupsWithName(final GroupSearch searchPage, final String searchText, final ArrayList<Group> results) {
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("groups/");
+
+        Query query = database.orderByChild("name");
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                final Group group = dataSnapshot.getValue(Group.class);
+
+                DatabaseManager manager = DatabaseManager.getInstance();
+                String uid = Authenticator.getInstance().getCurrentUser().getUid();
+
+                manager.getUserWithIdentifier(UserKeys.ID, uid, new GetDataListener() {
+                    @Override
+                    public void onSuccess(DataSnapshot data) {
+                        User currentUser = data.getValue(User.class);
+
+                        if(group.getName().toUpperCase().contains(searchText.toUpperCase()) && !currentUser.getGroups().contains(group.getID())) {
+                            results.add(group);
+                            searchPage.refreshView();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override

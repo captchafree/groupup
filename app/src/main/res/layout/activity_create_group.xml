@@ -57,6 +57,7 @@
         android:ems="10"
         android:hint="Enter Group's Name"
         android:inputType="textPersonName"
+        android:maxLength="25"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="44dp" />
 

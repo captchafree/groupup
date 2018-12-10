@@ -10,13 +10,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerv_view"
         android:layout_width="match_parent"
-        android:layout_height="433dp"
+        android:layout_height="378dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="78dp">
+        android:layout_marginTop="133dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -51,5 +51,40 @@
         android:layout_marginBottom="-3dp"
         android:background="@color/colorBackground"
         app:srcCompat="@mipmap/ic_magnify_bg" />
+
+    <RadioGroup
+
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="88dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/radio_group"
+            android:layout_marginBottom="-81dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Activity" />
+
+        <RadioButton
+            android:id="@+id/radio_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Name" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/radio_group"
+        android:layout_marginBottom="-88dp"
+        android:text="Search by:" />
 
 </RelativeLayout>
