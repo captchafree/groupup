@@ -88,6 +88,7 @@ public class Homepage extends AppCompatActivity implements PopupMenu.OnMenuItemC
         switch(item.getItemId()){
             case R.id.refresh:
                 this.onRestart();
+                return true;
             case R.id.search: //Navigate to the search page
                 intent = new Intent(this, GroupSearch.class);
                 break;
