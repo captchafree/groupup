@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -10,17 +10,30 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="229dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_weight="100"
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/group_info"
-        android:layout_width="371dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_above="@+id/member_recyc"
+        android:layout_below="@+id/image"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="3dp"
         android:text="test"
         android:textColor="#000"
         android:textSize="18sp" />
@@ -28,21 +41,39 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/member_recyc"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_below="@+id/group_info"
-        android:layout_marginTop="20dp">
+        android:layout_height="110dp"
+        android:layout_above="@+id/options_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="-2dp">
 
     </android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/options_button"
-        android:layout_width="wrap_content"
+        android:layout_width="106dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="140dp"
         android:layout_marginTop="22dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginRight="140dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/button_background"
         android:onClick="showPopup"
         android:text="Options"
         android:textColor="#FFFFFF"
         android:textSize="16dp" />
 
-</LinearLayout>
+</RelativeLayout>
